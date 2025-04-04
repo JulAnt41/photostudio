@@ -18,11 +18,15 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true])->label('Почта') ?>
 
-    <?= $form->field($model, 'phone')->textInput(['maxlength' => true])->label('Телефон') ?>
+    <?= $form->field($model, 'phone')->widget(\yii\widgets\MaskedInput::className(), [
+    'mask' => '+7(999)-999-99-99',
+    ])->textInput(['maxlength' => true])->label('Телефон') ?>
 
     <?= $form->field($model, 'password')->passwordInput(['maxlength' => true])->label('Пароль') ?>
 
-    <?= $form->field($model, 'birthday')->textInput()->label('Дата рождения') ?>
+    <?= $form->field($model, 'birthday')->widget(\yii\widgets\MaskedInput::class, [
+    'mask' => '9999-99-99', // Маска для формата гггг-мм-дд
+    ])->textInput(['placeholder' => 'гггг-мм-дд'])->label('Дата рождения') ?>
 
     <?= $form->field($model, 'id_sex')->textInput()->label('Пол') ?>
 

@@ -47,6 +47,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             ['login', 'unique', 'message' => 'Этот логин уже занят.'],
             ['email', 'email', 'message' => 'Введите корректный email'],
             ['phone', 'match', 'pattern' => '/^\+7\(\d{3}\)-\d{3}-\d{2}-\d{2}$/', 'message' => 'Телефон должен быть в формате +7(XXX)-XXX-XX-XX.'],
+            ['birthday', 'match', 'pattern' => '/^\d{4}-\d{2}-\d{2}$/', 'message' => 'Дата должна быть в формате гггг-мм-дд.'],
             ['password', 'string', 'tooShort' => 'Пароль должен содержать минимум 6 символов', 'min' => 6],
             ['name', 'match', 'pattern' => '/^[а-яА-ЯёЁ\s]+$/u', 'message' => 'Имя должно содержать только кириллицу и пробелы.'],
             [['birthday'], 'safe'],
