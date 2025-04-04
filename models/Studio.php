@@ -1,0 +1,69 @@
+<?php
+
+namespace app\models;
+
+use Yii;
+
+/**
+ * This is the model class for table "studio".
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $location
+ * @property string $description
+ * @property int $price
+ * @property int $dimensions
+ *
+ * @property Reservation[] $reservations
+ */
+class Studio extends \yii\db\ActiveRecord
+{
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName()
+    {
+        return 'studio';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
+    {
+        return [
+            [['name', 'location', 'description', 'price', 'dimensions'], 'required'],
+            [['location', 'description'], 'string'],
+            [['price', 'dimensions'], 'integer'],
+            [['name'], 'string', 'max' => 255],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'name' => 'Name',
+            'location' => 'Location',
+            'description' => 'Description',
+            'price' => 'Price',
+            'dimensions' => 'Dimensions',
+        ];
+    }
+
+    /**
+     * Gets query for [[Reservations]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReservations()
+    {
+        return $this->hasMany(Reservation::class, ['id_studio' => 'id']);
+    }
+
+}

@@ -1,5 +1,7 @@
 <?php
 
+use app\models\Sex;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -28,10 +30,13 @@ use yii\widgets\ActiveForm;
     'mask' => '9999-99-99', // Маска для формата гггг-мм-дд
     ])->textInput(['placeholder' => 'гггг-мм-дд'])->label('Дата рождения') ?>
 
-    <?= $form->field($model, 'id_sex')->textInput()->label('Пол') ?>
+    <?= $form->field($model, 'id_sex')->textInput()->dropDownList(
+        ArrayHelper::map(Sex::find()->all(), 'id', 'name'),
+        ['prompt' => 'Укажите ваш пол']
+    )->label('Пол') ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton('Зарегистрироваться', ['class' => 'btn btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

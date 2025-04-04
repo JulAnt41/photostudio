@@ -2,17 +2,16 @@
 
 namespace app\controllers;
 
-use Yii;
-use app\models\User;
-use app\models\UserSearch;
+use app\models\Studio;
+use app\models\StudioSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * UserController implements the CRUD actions for User model.
+ * StudioController implements the CRUD actions for Studio model.
  */
-class AdminController extends Controller
+class StudioController extends Controller
 {
     /**
      * @inheritDoc
@@ -32,32 +31,24 @@ class AdminController extends Controller
         );
     }
 
-    public function beforeAction($action)
-    {
-        if (!parent::beforeAction($action)) {
-            return false;
-        }
-
-        // Дополнительная проверка перед каждым действием на роль. Если роль не Админ - редирект на главную страницу
-        if (Yii::$app->user->isGuest || Yii::$app->user->identity->id_role !== 2) {
-            return $this->redirect(['site/index']);
-        }
-
-        return true;
-    }
-
     /**
-     * Lists all User models.
+     * Lists all Studio models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $searchModel = new StudioSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     /**
-     * Displays a single User model.
+     * Displays a single Studio model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -70,30 +61,29 @@ class AdminController extends Controller
     }
 
     /**
-     * Creates a new User model.
+     * Creates a new Studio model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new User();
-    
-         if ($model->load(Yii::$app->request->post())) {
-             if ($model->register()) {
-                 Yii::$app->session->setFlash('success', 'Регистрация прошла успешно!');
-                return $this->redirect(['site/index']); // Перенаправляем на главную страницу
-             } else {
-                 Yii::$app->session->setFlash('error', 'Ошибка при регистрации.');
-             }
-         }
-    
-         return $this->render('create', [
-             'model' => $model,
-         ]);
+        $model = new Studio();
+
+        if ($this->request->isPost) {
+            if ($model->load($this->request->post()) && $model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        } else {
+            $model->loadDefaultValues();
+        }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**
-     * Updates an existing User model.
+     * Updates an existing Studio model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -113,7 +103,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Deletes an existing User model.
+     * Deletes an existing Studio model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -127,18 +117,18 @@ class AdminController extends Controller
     }
 
     /**
-     * Finds the User model based on its primary key value.
+     * Finds the Studio model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return User the loaded model
+     * @return Studio the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    // protected function findModel($id)
-    // {
-    //     if (($model = User::findOne(['id' => $id])) !== null) {
-    //         return $model;
-    //     }
+    protected function findModel($id)
+    {
+        if (($model = Studio::findOne(['id' => $id])) !== null) {
+            return $model;
+        }
 
-    //     throw new NotFoundHttpException('The requested page does not exist.');
-    // }
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
 }
