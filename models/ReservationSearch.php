@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Reservation;
@@ -44,6 +45,11 @@ class ReservationSearch extends Reservation
         $query = Reservation::find();
 
         // add conditions that should always apply here
+
+        //Если обычный пользователь выводим только его заявки
+        if (Yii::$app->user->identity->id_role === 1) {
+            $query->andWhere(['id_user' => Yii::$app->user->id]);
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

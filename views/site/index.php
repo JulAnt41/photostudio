@@ -6,7 +6,25 @@ $this->title = 'My Yii Application';
 ?>
 <div class="site-index">
 
-    <div class="jumbotron text-center bg-transparent">
+    <div class="jumbotron text-center bg-transparent mt-5 mb-5">
+        <h1 class="display-4">Заголовок</h1>
+
+        <p class="lead">Слоган</p>
+
+        <?php 
+                // Проверка на гостя
+            if(Yii::$app->user->isGuest) {
+                echo  '<p><a class="btn btn-lg btn-success" href="user/create">Регистрация</a></p>';
+            } else if (Yii::$app->user->identity->id_role === 2) { // Проверка на админа
+                echo  '<p><a class="btn btn-lg btn-success" href="admin/index">Админ-панель</a></p>';
+            } else { //Если не гость и не админ
+                echo  '<p><a class="btn btn-lg btn-success" href="reservation/index">Мои заявки</a></p>';
+            }
+    
+        ?>
+    </div>
+
+    <!-- <div class="jumbotron text-center bg-transparent">
         <h1 class="display-4">Congratulations!</h1>
 
         <p class="lead">You have successfully created your Yii-powered application.</p>
@@ -49,5 +67,5 @@ $this->title = 'My Yii Application';
             </div>
         </div>
 
-    </div>
+    </div> -->
 </div>
