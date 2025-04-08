@@ -1,0 +1,59 @@
+/* web/css/header.css */
+
+header {
+    background-color: #912C2F; /* Цвет фона */
+    padding: 10px; /* Отступы */
+    height: 80px;
+}
+
+.navbar-nav .nav-link {
+    color: #ffffff; /* Цвет текста навигации */
+    margin-right: 15px; /* Отступы между элементами */
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ffc107; /* Цвет текста при наведении */
+}
+
+.fixed-top {
+    top: 0; /* Фиксированная позиция */
+    z-index: 1030; /* Прозрачность */
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+.btn-log {
+    padding: 10px;
+    border: none;
+}
+
+.btn-logout {
+    background-color: #381010;
+    color: white;
+}
+
+.btn-logout:hover {
+    background-color: #36332F;
+    color: white;
+}
+
+.footer {
+    background-color: #36332F;
+}
+
+.footer_text {
+    color: #CCB59F;
+}
+
+.btn-main {
+    background-color: #912C2F;
+    color: white;
+}
+
+.btn-main:hover {
+    background-color: #702124;
+    color: rgb(230, 230, 230);
+}

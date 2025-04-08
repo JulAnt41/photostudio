@@ -11,6 +11,9 @@ use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
 
 AppAsset::register($this);
+$this->registerCssFile('@web/css/style.css', [
+    'depends' => [AppAsset::class],
+]);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -28,45 +31,31 @@ AppAsset::register($this);
 <header>
     <?php
     NavBar::begin([
-        'brandLabel' => 'LensLounge',
+        'brandLabel' => ' LensLounge',
         'brandUrl' => Yii::$app->homeUrl,
         'options' => [
-            'class' => 'navbar navbar-expand-md navbar-dark bg-dark fixed-top',
+            'class' => 'navbar-expand-md navbar-dark',
         ],
     ]);
+
     echo Nav::widget([
-        'options' => ['class' => 'navbar-nav'],
+        'options' => ['class' => 'navbar-nav ml-auto'],
         'items' => [
-            // Проверка на обычного пользователя
             Yii::$app->user->identity->id_role === 1 ? ['label' => 'Мои фотосессии', 'url' => ['/reservation/index']] : '',
-
-            //Проверка на админа
             Yii::$app->user->identity->id_role === 2 ? ['label' => 'Админка', 'url' => ['/admin/index']] : '',
-
             Yii::$app->user->isGuest
                 ? ['label' => 'Войти', 'url' => ['/site/login']]
                 : '<li class="nav-item">'
                     . Html::beginForm(['/site/logout'])
                     . Html::submitButton(
                         'Выйти (' . Yii::$app->user->identity->login . ')',
-                        ['class' => 'nav-link btn btn-link logout']
-            // ['label' => 'Home', 'url' => ['/site/index']],
-            // ['label' => 'About', 'url' => ['/site/about']],
-            // ['label' => 'Contact', 'url' => ['/site/contact']],
-            // Yii::$app->user->isGuest ? (
-            //     ['label' => 'Login', 'url' => ['/site/login']]
-            // ) : (
-            //     '<li>'
-            //     . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
-            //     . Html::submitButton(
-            //         'Logout (' . Yii::$app->user->identity->login . ')',
-            //         ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-            // )
+                        ['class' => 'btn btn-log btn-logout']
+                    )
+                    . Html::endForm()
+                    . '</li>',
         ],
     ]);
+
     NavBar::end();
     ?>
 </header>
@@ -74,17 +63,16 @@ AppAsset::register($this);
 <main role="main" class="flex-shrink-0">
     <div class="container">
         <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+            'links' => $this->params['breadcrumbs'] ?? [],
         ]) ?>
         <?= Alert::widget() ?>
         <?= $content ?>
     </div>
 </main>
 
-<footer class="footer mt-auto py-3 text-muted">
+<footer class="footer py-3">
     <div class="container">
-        <p class="float-left">&copy; My Company <?= date('Y') ?></p>
-        <p class="float-right"><?= Yii::powered() ?></p>
+        <p class="center footer_text">&copy; LensLounge <?= date('Y') ?></p>
     </div>
 </footer>
 
