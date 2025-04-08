@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use Yii;
 use app\models\Reservation;
 use app\models\ReservationSearch;
 use yii\web\Controller;
@@ -68,14 +69,21 @@ class ReservationController extends Controller
     public function actionCreate()
     {
         $model = new Reservation();
+        $model->id_user = Yii::$app->user->id; // Автоматически подставляем текущего пользователя
 
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
-        } else {
-            $model->loadDefaultValues();
         }
+
+        // if ($this->request->isPost) {
+        //     if ($model->load($this->request->post()) && $model->save()) {
+        //         return $this->redirect(['view', 'id' => $model->id]);
+        //     }
+        // } else {
+        //     $model->loadDefaultValues();
+        // }
 
         return $this->render('create', [
             'model' => $model,
@@ -131,4 +139,25 @@ class ReservationController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionChangeStatus($id, $status)
+    {
+        // Найти модель по ID
+        $model = $this->findModel($id);
+        
+        // Установка нового статуса
+        $model->id_status = $status;
+        //$model->cancel_reason = Yii::$app->request->post('cancel_reason');
+
+        // Сохранение модели и проверка успешности операции
+        if ($model->save()) {
+            Yii::$app->session->setFlash('success', 'Статус успешно изменен');
+        } else {
+            Yii::$app->session->setFlash('error', 'Ошибка при изменении статуса: ' . implode(", ", $model->getErrors()));
+        }
+        
+        // Перенаправление на страницу просмотра
+        return $this->redirect(['view', 'id' => $id]);
+    }
+    
 }

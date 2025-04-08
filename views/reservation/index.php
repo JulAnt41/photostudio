@@ -1,24 +1,26 @@
 <?php
 
 use app\models\Reservation;
+use app\models\Status;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
+use yii\helpers\ArrayHelper;
 
 /** @var yii\web\View $this */
 /** @var app\models\ReservationSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Reservations';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Бронирования';
+// $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="reservation-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Reservation', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Забронировать фотосъемку', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -29,14 +31,49 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'id_user',
-            'id_studio',
-            'id_photographer',
-            'date',
-            //'created_at',
+            [
+                'attribute' => 'id_user',
+                'value' => 'user.name',
+                'label' => 'Имя'
+            ],
+            [
+                'attribute' => 'id_studio',
+                'value' => 'studio.name',
+                'label' => 'Студия'
+            ],
+            [
+                'attribute' => 'id_photographer',
+                'value' => 'photographer.user.name',
+                'label' => 'Фотограф'
+            ],
+            // [
+            //     'attribute' => 'service_id',
+            //     'value' => 'service.type',
+            //     'label' => 'Услуга',
+            //     'filter' => ArrayHelper::map(Service::find()->all(), 'id', 'type')
+            // ],
+            
+            [
+                'attribute' => 'date',
+                'label' => 'Дата фотосъемки',
+                'format' => ['datetime', 'php:d.m.Y']
+            ],
+            [
+                'attribute' => 'created_at',
+                'label' => 'Дата бронирования',
+                'format' => ['datetime', 'php:d.m.Y']
+            ],
+            [
+                'attribute' => 'comment',
+                'label' => 'Комментарий',
+            ],
+            [
+                'attribute' => 'id_status',
+                'value' => 'status.name',
+                'label' => 'Статус',
+                'filter' => ArrayHelper::map(Status::find()->all(), 'id', 'name')
+            ],
             //'comment:ntext',
-            //'id_status',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Reservation $model, $key, $index, $column) {

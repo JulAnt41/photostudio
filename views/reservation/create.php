@@ -5,9 +5,9 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Reservation $model */
 
-$this->title = 'Create Reservation';
-$this->params['breadcrumbs'][] = ['label' => 'Reservations', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Забронировать фотосъемку';
+// $this->params['breadcrumbs'][] = ['label' => 'Reservations', 'url' => ['index']];
+// $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="reservation-create">
 
