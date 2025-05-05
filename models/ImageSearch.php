@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Photographer;
+use app\models\Image;
 
 /**
- * PhotographerSearch represents the model behind the search form of `app\models\Photographer`.
+ * ImageSearch represents the model behind the search form of `app\models\Image`.
  */
-class PhotographerSearch extends Photographer
+class ImageSearch extends Image
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class PhotographerSearch extends Photographer
     public function rules()
     {
         return [
-            [['id', 'id_user', 'price'], 'integer'],
-            [['specialization', 'description'], 'safe'],
+            [['id', 'id_photographer'], 'integer'],
+            [['img'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class PhotographerSearch extends Photographer
      */
     public function search($params, $formName = null)
     {
-        $query = Photographer::find();
+        $query = Image::find();
 
         // add conditions that should always apply here
 
@@ -60,12 +60,10 @@ class PhotographerSearch extends Photographer
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'id_user' => $this->id_user,
-            'price' => $this->price,
+            'id_photographer' => $this->id_photographer,
         ]);
 
-        $query->andFilterWhere(['like', 'specialization', $this->specialization])
-            ->andFilterWhere(['like', 'description', $this->description]);
+        $query->andFilterWhere(['like', 'img', $this->img]);
 
         return $dataProvider;
     }

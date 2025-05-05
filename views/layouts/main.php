@@ -70,7 +70,7 @@ $this->registerCssFile('@web/css/style.css', [
     </div>
 </main>
 
-<footer class="footer py-3">
+<footer class="footer mt-auto py-3">
     <div class="container">
         <p class="center footer_text">&copy; LensLounge <?= date('Y') ?></p>
     </div>

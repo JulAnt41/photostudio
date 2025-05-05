@@ -2,7 +2,6 @@
 
 use app\models\Reservation;
 use app\models\Status;
-use app\models\Payment;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;

@@ -13,12 +13,9 @@ use Yii;
  * @property int $id_photographer
  * @property string $date
  * @property string $created_at
- * @property int|null $price
- * @property int $id_payment
  * @property string|null $comment
  * @property int $id_status
  *
- * @property Payment $payment
  * @property Photographer $photographer
  * @property Review[] $reviews
  * @property Status $status
@@ -43,17 +40,16 @@ class Reservation extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['price', 'comment'], 'default', 'value' => null],
+            [['comment'], 'default', 'value' => null],
             [['id_status'], 'default', 'value' => 1],
-            [['id_user', 'id_studio', 'id_photographer', 'date', 'id_payment'], 'required'],
-            [['id_user', 'id_studio', 'id_photographer', 'price', 'id_payment', 'id_status'], 'integer'],
+            [['id_user', 'id_studio', 'id_photographer', 'date'], 'required'],
+            [['id_user', 'id_studio', 'id_photographer', 'id_status'], 'integer'],
             [['date', 'created_at'], 'safe'],
             [['comment'], 'string'],
             [['id_photographer'], 'exist', 'skipOnError' => true, 'targetClass' => Photographer::class, 'targetAttribute' => ['id_photographer' => 'id']],
             [['id_status'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['id_status' => 'id']],
             [['id_studio'], 'exist', 'skipOnError' => true, 'targetClass' => Studio::class, 'targetAttribute' => ['id_studio' => 'id']],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['id_user' => 'id']],
-            [['id_payment'], 'exist', 'skipOnError' => true, 'targetClass' => Payment::class, 'targetAttribute' => ['id_payment' => 'id']],
         ];
     }
 
@@ -69,21 +65,9 @@ class Reservation extends \yii\db\ActiveRecord
             'id_photographer' => 'Id Photographer',
             'date' => 'Date',
             'created_at' => 'Created At',
-            'price' => 'Price',
-            'id_payment' => 'Id Payment',
             'comment' => 'Comment',
             'id_status' => 'Id Status',
         ];
-    }
-
-    /**
-     * Gets query for [[Payment]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getPayment()
-    {
-        return $this->hasOne(Payment::class, ['id' => 'id_payment']);
     }
 
     /**

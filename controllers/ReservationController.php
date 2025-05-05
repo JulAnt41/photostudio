@@ -147,7 +147,6 @@ class ReservationController extends Controller
         
         // Установка нового статуса
         $model->id_status = $status;
-        //$model->cancel_reason = Yii::$app->request->post('cancel_reason');
 
         // Сохранение модели и проверка успешности операции
         if ($model->save()) {

@@ -56,18 +56,9 @@ $this->title = 'Бронирование №' . $model->id;
                 'format' => ['datetime', 'php:d.m.Y H:i'] // Красивое форматирование даты
             ],
             [
-                'attribute' => 'price',
-                'label' => 'Стоимость'
-            ],
-            [
-                'attribute' => 'id_payment',
-                'value' => $model->payment->name,
-                'label' => 'Оплата'
-            ],
-            [
                 'attribute' => 'comment',
                 'label' => 'Комментарий'
-            ],
+             ],
             // 'comment:ntext',
             [
                 'attribute' => 'id_status',

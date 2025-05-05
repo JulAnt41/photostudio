@@ -4,12 +4,12 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Photographer;
+use app\models\Reservation;
 
 /**
- * PhotographerSearch represents the model behind the search form of `app\models\Photographer`.
+ * ReservationSearch represents the model behind the search form of `app\models\Reservation`.
  */
-class PhotographerSearch extends Photographer
+class ReservationSearch extends Reservation
 {
     /**
      * {@inheritdoc}
@@ -17,8 +17,8 @@ class PhotographerSearch extends Photographer
     public function rules()
     {
         return [
-            [['id', 'id_user', 'price'], 'integer'],
-            [['specialization', 'description'], 'safe'],
+            [['id', 'id_user', 'id_studio', 'id_photographer', 'price', 'id_payment', 'id_status'], 'integer'],
+            [['date', 'created_at', 'comment'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class PhotographerSearch extends Photographer
      */
     public function search($params, $formName = null)
     {
-        $query = Photographer::find();
+        $query = Reservation::find();
 
         // add conditions that should always apply here
 
@@ -61,11 +61,16 @@ class PhotographerSearch extends Photographer
         $query->andFilterWhere([
             'id' => $this->id,
             'id_user' => $this->id_user,
+            'id_studio' => $this->id_studio,
+            'id_photographer' => $this->id_photographer,
+            'date' => $this->date,
+            'created_at' => $this->created_at,
             'price' => $this->price,
+            'id_payment' => $this->id_payment,
+            'id_status' => $this->id_status,
         ]);
 
-        $query->andFilterWhere(['like', 'specialization', $this->specialization])
-            ->andFilterWhere(['like', 'description', $this->description]);
+        $query->andFilterWhere(['like', 'comment', $this->comment]);
 
         return $dataProvider;
     }

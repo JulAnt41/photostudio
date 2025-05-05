@@ -133,4 +133,23 @@ class UserController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionChangeStatus($id, $role)
+    {
+        // Найти модель по ID
+        $model = $this->findModel($id);
+        
+        // Установка новой роли
+        $model->id_role = $role;
+
+        // Сохранение модели и проверка успешности операции
+        if ($model->save()) {
+            Yii::$app->session->setFlash('success', 'Роль успешно изменена');
+        } else {
+            Yii::$app->session->setFlash('error', 'Ошибка при изменении роли: ' . implode(", ", $model->getErrors()));
+        }
+        
+        // Перенаправление на страницу просмотра
+        return $this->redirect(['view', 'id' => $id]);
+    }
 }

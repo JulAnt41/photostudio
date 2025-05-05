@@ -18,7 +18,7 @@ class ReservationSearch extends Reservation
     public function rules()
     {
         return [
-            [['id', 'id_user', 'id_studio', 'id_photographer', 'id_status'], 'integer'],
+            [['id', 'id_user', 'id_studio', 'id_photographer', 'price', 'id_payment', 'id_status'], 'integer'],
             [['date', 'created_at', 'comment'], 'safe'],
         ];
     }
@@ -43,8 +43,6 @@ class ReservationSearch extends Reservation
     public function search($params, $formName = null)
     {
         $query = Reservation::find();
-
-        // add conditions that should always apply here
 
         //Если обычный пользователь выводим только его заявки
         if (Yii::$app->user->identity->id_role === 1) {
@@ -71,6 +69,8 @@ class ReservationSearch extends Reservation
             'id_photographer' => $this->id_photographer,
             'date' => $this->date,
             'created_at' => $this->created_at,
+            'price' => $this->price,
+            'id_payment' => $this->id_payment,
             'id_status' => $this->id_status,
         ]);
 

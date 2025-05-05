@@ -10,15 +10,15 @@ use yii\grid\GridView;
 /** @var app\models\StudioSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Studios';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Студии';
+// $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="studio-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Studio', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить студию', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -29,12 +29,26 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'name',
-            'location:ntext',
-            'description:ntext',
-            'price',
-            //'dimensions',
+            [
+                'attribute' => 'name',
+                'label' => 'Название',
+            ],
+            [
+                'attribute' => 'location',
+                'label' => 'Местоположение',
+            ],
+            [
+                'attribute' => 'description',
+                'label' => 'Описание',
+            ],
+            [
+                'attribute' => 'price',
+                'label' => 'Стоимость, рублей/час',
+            ],
+            [
+                'attribute' => 'dimensions',
+                'label' => 'Размеры, м²',
+            ],
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Studio $model, $key, $index, $column) {

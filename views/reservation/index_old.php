@@ -1,24 +1,24 @@
 <?php
 
-use app\models\Photographer;
+use app\models\Reservation;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
 /** @var yii\web\View $this */
-/** @var app\models\PhotographerSearch $searchModel */
+/** @var app\models\ReservationSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Photographers';
+$this->title = 'Reservations';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="photographer-index">
+<div class="reservation-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Photographer', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Reservation', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -31,12 +31,17 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'id_user',
-            'specialization',
-            'price',
-            'description:ntext',
+            'id_studio',
+            'id_photographer',
+            'date',
+            //'created_at',
+            //'price',
+            //'id_payment',
+            //'comment:ntext',
+            //'id_status',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Photographer $model, $key, $index, $column) {
+                'urlCreator' => function ($action, Reservation $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }
             ],

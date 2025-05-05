@@ -10,10 +10,9 @@ use Yii;
  * @property int $id
  * @property int $id_user
  * @property string $specialization
- * @property int|null $price
  * @property string $description
+ * @property string|null $img
  *
- * @property Image[] $images
  * @property Reservation[] $reservations
  * @property User $user
  */
@@ -35,11 +34,11 @@ class Photographer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['price'], 'default', 'value' => null],
+            [['img'], 'default', 'value' => null],
             [['id_user', 'specialization', 'description'], 'required'],
-            [['id_user', 'price'], 'integer'],
+            [['id_user'], 'integer'],
             [['description'], 'string'],
-            [['specialization'], 'string', 'max' => 255],
+            [['specialization', 'img'], 'string', 'max' => 255],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['id_user' => 'id']],
         ];
     }
@@ -53,19 +52,9 @@ class Photographer extends \yii\db\ActiveRecord
             'id' => 'ID',
             'id_user' => 'Id User',
             'specialization' => 'Specialization',
-            'price' => 'Price',
             'description' => 'Description',
+            'img' => 'Img',
         ];
-    }
-
-    /**
-     * Gets query for [[Images]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getImages()
-    {
-        return $this->hasMany(Image::class, ['id_photographer' => 'id']);
     }
 
     /**

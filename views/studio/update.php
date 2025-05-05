@@ -5,10 +5,10 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Studio $model */
 
-$this->title = 'Update Studio: ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Studios', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->title = 'Обновить студию: ' . $model->name;
+// $this->params['breadcrumbs'][] = ['label' => 'Studios', 'url' => ['index']];
+// $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
+// $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="studio-update">
 

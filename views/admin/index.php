@@ -18,6 +18,15 @@ $this->title = 'Админ-панель';
     <p>
         <?= Html::a('Бронирования', ['/reservation'], ['class' => 'btn btn-lg btn-main admin_btn']) ?>
     </p>
+    <p>
+        <?= Html::a('Пользователи', ['/user'], ['class' => 'btn btn-lg btn-main admin_btn']) ?>
+    </p>
+    <p>
+        <?= Html::a('Студии', ['/studio'], ['class' => 'btn btn-lg btn-main admin_btn']) ?>
+    </p>
+    <p>
+        <?= Html::a('Фотографы', ['/photographer'], ['class' => 'btn btn-lg btn-main admin_btn']) ?>
+    </p>
 
     <style>
         .admin_btn {
