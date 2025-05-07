@@ -13,6 +13,7 @@ use Yii;
  * @property string $description
  * @property int $price
  * @property int $dimensions
+ * @property string|null $img
  *
  * @property Reservation[] $reservations
  */
@@ -34,10 +35,11 @@ class Studio extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['img'], 'default', 'value' => null],
             [['name', 'location', 'description', 'price', 'dimensions'], 'required'],
             [['location', 'description'], 'string'],
             [['price', 'dimensions'], 'integer'],
-            [['name'], 'string', 'max' => 255],
+            [['name', 'img'], 'string', 'max' => 255],
         ];
     }
 
@@ -53,6 +55,7 @@ class Studio extends \yii\db\ActiveRecord
             'description' => 'Description',
             'price' => 'Price',
             'dimensions' => 'Dimensions',
+            'img' => 'Img',
         ];
     }
 

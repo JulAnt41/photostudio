@@ -38,23 +38,55 @@ $this->registerCssFile('@web/css/style.css', [
         ],
     ]);
 
+    $items = [
+        ['label' => 'Студии', 'url' => ['/studio/user-index']],
+        ['label' => 'Фотографы', 'url' => ['/location']],
+    ];
+    if(Yii::$app->user->isGuest){
+        $items[] = ['label' => 'Вход', 'url' => ['/site/login']];
+        $items[] = ['label' => 'Регистрация', 'url' => ['/user/create']];
+        
+    }else {
+        if(Yii::$app->user->identity->id_role == 2) {
+            $items[] = ['label' => 'Админка', 'url' => ['/admin/index']];
+        } else if(Yii::$app->user->identity->id_role == 1) {
+            $items[] = ['label' => 'Мои фотосессии', 'url' => ['/reservation/index']];
+        }
+
+        $items[] = '<li class="nav-item">'
+            . Html::beginForm(['/site/logout'])
+            . Html::submitButton(
+                'Выйти (' . Yii::$app->user->identity->login . ')',
+                ['class' => 'btn btn-log btn-logout']
+            )
+            . Html::endForm()
+                . '</li>';
+
+    }
+
     echo Nav::widget([
-        'options' => ['class' => 'navbar-nav ml-auto'],
-        'items' => [
-            Yii::$app->user->identity->id_role === 1 ? ['label' => 'Мои фотосессии', 'url' => ['/reservation/index']] : '',
-            Yii::$app->user->identity->id_role === 2 ? ['label' => 'Админка', 'url' => ['/admin/index']] : '',
-            Yii::$app->user->isGuest
-                ? ['label' => 'Войти', 'url' => ['/site/login']]
-                : '<li class="nav-item">'
-                    . Html::beginForm(['/site/logout'])
-                    . Html::submitButton(
-                        'Выйти (' . Yii::$app->user->identity->login . ')',
-                        ['class' => 'btn btn-log btn-logout']
-                    )
-                    . Html::endForm()
-                    . '</li>',
-        ],
+        'options' => ['class' => 'navbar-nav'],
+        'items' => $items,
     ]);
+
+    // echo Nav::widget([
+    //     'options' => ['class' => 'navbar-nav ml-auto'],
+    //     'items' => [
+    //         Yii::$app->user->identity->id_role === 2 ? ['label' => 'Студии', 'url' => ['/studio/user-index']] : '',
+    //         Yii::$app->user->identity->id_role === 1 ? ['label' => 'Мои фотосессии', 'url' => ['/reservation/index']] : '',
+    //         Yii::$app->user->identity->id_role === 2 ? ['label' => 'Админка', 'url' => ['/admin/index']] : '',
+    //         Yii::$app->user->isGuest
+    //             ? ['label' => 'Войти', 'url' => ['/site/login']]
+    //             : '<li class="nav-item">'
+    //                 . Html::beginForm(['/site/logout'])
+    //                 . Html::submitButton(
+    //                     'Выйти (' . Yii::$app->user->identity->login . ')',
+    //                     ['class' => 'btn btn-log btn-logout']
+    //                 )
+    //                 . Html::endForm()
+    //                 . '</li>',
+    //     ],
+    // ]);
 
     NavBar::end();
     ?>
