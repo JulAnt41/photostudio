@@ -12,6 +12,7 @@ use Yii;
  * @property string $specialization
  * @property int|null $price
  * @property string $description
+ * @property string|null $img
  *
  * @property Image[] $images
  * @property Reservation[] $reservations
@@ -35,11 +36,11 @@ class Photographer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['price'], 'default', 'value' => null],
+            [['price', 'img'], 'default', 'value' => null],
             [['id_user', 'specialization', 'description'], 'required'],
             [['id_user', 'price'], 'integer'],
             [['description'], 'string'],
-            [['specialization'], 'string', 'max' => 255],
+            [['specialization', 'img'], 'string', 'max' => 255],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['id_user' => 'id']],
         ];
     }
@@ -55,6 +56,7 @@ class Photographer extends \yii\db\ActiveRecord
             'specialization' => 'Specialization',
             'price' => 'Price',
             'description' => 'Description',
+            'img' => 'Img',
         ];
     }
 

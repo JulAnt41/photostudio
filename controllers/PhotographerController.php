@@ -47,6 +47,17 @@ class PhotographerController extends Controller
         ]);
     }
 
+    public function actionUserIndex()
+    {
+        $searchModel = new PhotographerSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        return $this->render('user-index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
     /**
      * Displays a single Photographer model.
      * @param int $id ID
@@ -56,6 +67,13 @@ class PhotographerController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
+    public function actionUserView($id)
+    {
+        return $this->render('user-view', [
             'model' => $this->findModel($id),
         ]);
     }

@@ -40,7 +40,7 @@ $this->registerCssFile('@web/css/style.css', [
 
     $items = [
         ['label' => 'Студии', 'url' => ['/studio/user-index']],
-        ['label' => 'Фотографы', 'url' => ['/location']],
+        ['label' => 'Фотографы', 'url' => ['/photographer/user-index']],
     ];
     if(Yii::$app->user->isGuest){
         $items[] = ['label' => 'Вход', 'url' => ['/site/login']];
