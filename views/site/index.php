@@ -4,7 +4,7 @@
 
 use app\assets\AppAsset;
 
-$this->title = 'My Yii Application';
+$this->title = 'LensLounge - аренда фотостудий и организация фотосессий';
 $this->registerCssFile('@web/css/style.css', [
     'depends' => [AppAsset::class],
 ]);
@@ -19,7 +19,7 @@ $this->registerCssFile('@web/css/style.css', [
     <?php 
         // Проверка на гостя
         if (Yii::$app->user->isGuest) {
-            echo '<p><a class="btn btn-lg btn-main" href="user/create">Присоединиться к нам</a></p>';
+            echo '<p><a class="btn-main" href="user/create">Присоединиться к нам</a></p>';
         } else if (Yii::$app->user->identity->id_role === 2) { // Проверка на админа
             echo '<p><a class="btn btn-lg btn-main" href="admin/index">Перейти в админ-панель</a></p>';
         } else if (Yii::$app->user->identity->id_role === 3) {
@@ -29,50 +29,17 @@ $this->registerCssFile('@web/css/style.css', [
         }
     ?>
 </div>
-
-
-    <!-- <div class="jumbotron text-center bg-transparent">
-        <h1 class="display-4">Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
-    </div>
-
-    <div class="body-content">
-
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
-        </div>
-
-    </div> -->
 </div>
+
+<style>
+    .btn-main {
+    background-color: rgba(158, 105, 58, 1) !important;
+    color: white !important;
+    border-radius: 50px !important; /* Круглая кнопка */
+    padding: 8px 20px !important;
+    margin-left: 15px !important;
+    border: none !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+}
+</style>
