@@ -22,6 +22,8 @@ $this->registerCssFile('@web/css/style.css', [
             echo '<p><a class="btn btn-lg btn-main" href="user/create">Присоединиться к нам</a></p>';
         } else if (Yii::$app->user->identity->id_role === 2) { // Проверка на админа
             echo '<p><a class="btn btn-lg btn-main" href="admin/index">Перейти в админ-панель</a></p>';
+        } else if (Yii::$app->user->identity->id_role === 3) {
+            echo '<p><a class="btn btn-lg btn-main" href="photographer/photographer-index">Перейти в панель фотографа</a></p>';
         } else { // Если не гость и не админ
             echo '<p><a class="btn btn-lg btn-main" href="reservation/index">Просмотреть мои фотосессии</a></p>';
         }

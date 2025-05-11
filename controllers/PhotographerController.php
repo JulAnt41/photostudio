@@ -2,8 +2,10 @@
 
 namespace app\controllers;
 
+use Yii;
 use app\models\Photographer;
 use app\models\PhotographerSearch;
+use app\models\Reservation;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -58,6 +60,18 @@ class PhotographerController extends Controller
         ]);
     }
 
+    public function actionPhotographerIndex()
+    {
+        $searchModel = new PhotographerSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        return $this->render('photographer-index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+        
+    }
+
     /**
      * Displays a single Photographer model.
      * @param int $id ID
@@ -77,6 +91,20 @@ class PhotographerController extends Controller
             'model' => $this->findModel($id),
         ]);
     }
+
+    public function actionPhotographerView()
+    {
+        $userId = Yii::$app->user->identity->id; // Получаем ID текущего пользователя
+        $upcomingReservations = Reservation::find()
+            ->where(['id_photographer' => $userId])
+            ->andWhere(['>=', 'date', date('Y-m-d')]) // Фильтруем только предстоящие фотосессии
+            ->all();
+
+        return $this->render('photographer-view', [
+            'upcomingReservations' => $upcomingReservations,
+        ]);
+    }
+
 
     /**
      * Creates a new Photographer model.

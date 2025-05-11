@@ -42,15 +42,17 @@ $this->registerCssFile('@web/css/style.css', [
         ['label' => 'Студии', 'url' => ['/studio/user-index']],
         ['label' => 'Фотографы', 'url' => ['/photographer/user-index']],
     ];
-    if(Yii::$app->user->isGuest){
+    
+    if (Yii::$app->user->isGuest) {
         $items[] = ['label' => 'Вход', 'url' => ['/site/login']];
         $items[] = ['label' => 'Регистрация', 'url' => ['/user/create']];
-        
-    }else {
-        if(Yii::$app->user->identity->id_role == 2) {
+    } else {
+        if (Yii::$app->user->identity->id_role == 2) {
             $items[] = ['label' => 'Админка', 'url' => ['/admin/index']];
-        } else if(Yii::$app->user->identity->id_role == 1) {
+        } else if (Yii::$app->user->identity->id_role == 1) {
             $items[] = ['label' => 'Мои фотосессии', 'url' => ['/reservation/index']];
+        } else if (Yii::$app->user->identity->id_role == 3) {
+            $items[] = ['label' => 'Фотограф', 'url' => ['/photographer/photographer-index']];
         }
 
         $items[] = '<li class="nav-item">'
@@ -60,8 +62,7 @@ $this->registerCssFile('@web/css/style.css', [
                 ['class' => 'btn btn-log btn-logout']
             )
             . Html::endForm()
-                . '</li>';
-
+            . '</li>';
     }
 
     echo Nav::widget([
