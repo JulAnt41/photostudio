@@ -18,3 +18,13 @@ $this->title = 'Регистрация';
     ]) ?>
 
 </div>
+
+<style>
+    h1 {
+        text-align: center;
+        color: rgba(54, 51, 47, 1); /* Цвет как у других заголовков */
+        letter-spacing: 1px; /* Разрежение между буквами */
+        font-size: 42px;
+        margin: 0;
+    }
+</style>

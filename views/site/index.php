@@ -33,13 +33,18 @@ $this->registerCssFile('@web/css/style.css', [
 
 <style>
     .btn-main {
-    background-color: rgba(158, 105, 58, 1) !important;
-    color: white !important;
-    border-radius: 50px !important; /* Круглая кнопка */
-    padding: 8px 20px !important;
-    margin-left: 15px !important;
-    border: none !important;
-    text-decoration: none !important;
-    display: inline-block !important;
-}
+        background-color: rgba(158, 105, 58, 1) !important;
+        color: white !important;
+        border-radius: 50px !important; /* Круглая кнопка */
+        padding: 8px 30px !important;
+        margin-left: 15px !important;
+        border: none !important;
+        text-decoration: none !important;
+        display: inline-block !important;
+        font-size: 20px;
+    }
+
+    .btn-main:hover {
+        background-color: rgb(126, 83, 45) !important;
+    }
 </style>

@@ -20,3 +20,78 @@ body {
     text-decoration: none !important;
     display: inline-block !important;
 }
+
+/* Общие стили формы */
+.custom-registration-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px;
+    background: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+/* Стили для заголовков полей */
+.form-label {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* Стили для полей ввода */
+.form-control {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 12px 15px;
+    font-size: 16px;
+    transition: all 0.3s;
+}
+
+.form-control:focus {
+    border-color: #4a89dc;
+    box-shadow: 0 0 5px rgba(74, 137, 220, 0.3);
+}
+
+/* Стили для кнопки */
+.btn-submit {
+    background-color: #4a89dc;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-submit:hover {
+    background-color: #3a70c2;
+}
+
+/* Специальные стили для отдельных полей */
+.login-field {
+    margin-bottom: 25px;
+}
+
+.phone-input {
+    background-color: #f5f9ff;
+}
+
+/* Стили для выпадающего списка */
+select.form-control {
+    height: 45px;
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 15px;
+}
+
+.date-input {
+    background-image: url('data:image/svg+xml;utf8,<svg ... календарь icon ... />');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 20px;
+}

@@ -174,7 +174,7 @@ header {
 }
 
 .nav-login-btn:hover {
-    background-color: rgba(56, 16, 16, 1) !important;
+    background-color: rgb(119, 37, 39) !important;
 }
 
 /* Стиль для ссылки "Регистрация" */
