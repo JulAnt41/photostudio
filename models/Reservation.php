@@ -45,7 +45,7 @@ class Reservation extends \yii\db\ActiveRecord
         return [
             [['price', 'comment'], 'default', 'value' => null],
             [['id_status'], 'default', 'value' => 1],
-            [['id_user', 'id_studio', 'id_photographer', 'date', 'id_payment'], 'required'],
+            [['id_user', 'id_studio', 'id_photographer', 'date', 'id_payment'], 'required', 'message' => 'Обязательное поле'],
             [['id_user', 'id_studio', 'id_photographer', 'price', 'id_payment', 'id_status'], 'integer'],
             [['date', 'created_at'], 'safe'],
             [['comment'], 'string'],

@@ -51,7 +51,7 @@ $this->registerCssFile('@web/css/style.css', [
         if (Yii::$app->user->identity->id_role == 2) {
             $centerItems[] = ['label' => 'Админка', 'url' => ['/admin/index']];
         } else if (Yii::$app->user->identity->id_role == 1) {
-            $centerItems[] = ['label' => 'Мои фотосессии', 'url' => ['/reservation/index']];
+            $centerItems[] = ['label' => 'Мои фотосессии', 'url' => ['/reservation/user-index']];
         } else if (Yii::$app->user->identity->id_role == 3) {
             $centerItems[] = ['label' => 'Фотограф', 'url' => ['/photographer/photographer-index']];
         }

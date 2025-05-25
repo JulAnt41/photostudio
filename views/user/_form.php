@@ -10,9 +10,9 @@ use app\assets\AppAsset;
 /** @var app\models\User $model */
 /** @var yii\widgets\ActiveForm $form */
 
-$this->registerCssFile('@web/css/style.css', [
-    'depends' => [AppAsset::class],
-]);
+// $this->registerCssFile('@web/css/style.css', [
+//     'depends' => [AppAsset::class],
+// ]);
 ?>
 
 <div class="user-form custom-registration-form">

@@ -9,43 +9,26 @@ $this->title = $model->user->name;
 ?>
 
 <div class="photographer-view">    
-    <h1><?= Html::encode($this->title) ?></h1>        
+    <h1><?= Html::encode($this->title) ?></h1>  
 
-    <div class="photographer-image">
-        <?= Html::img(Yii::getAlias('@web/images/' . Html::encode($model->img)), ['alt' => Html::encode($model->user->name), 'class' => 'img-responsive']) ?>
-    </div>
-
-    <?= DetailView::widget([        
-        'model' => $model,        
-        'attributes' => [            
-            [
-                'label' => 'Специализация',
-                'attribute' => 'specialization',
-            ],  
-            [                
-                'label' => 'Почта',                
-                'value' => $model->user->email, 
-            ],            
-            [                
-                'label' => 'Телефон',                
-                'value' => $model->user->phone,
-            ],    
-            [                
-                'label' => 'О фотографе',                
-                'attribute' => 'description',            
-            ],         
-            [
-                'label' => 'Стоимость, рублей/час',
-                'attribute' => 'price',
-            ],         
-        ],    
-    ]) ?>    
-
-        <div class="studio-info">
-            <p><strong>Местоположение:</strong> <?= Html::encode($model->user->name) ?></p>
-            <p><strong>Описание:</strong> <?= Html::encode($model->description) ?></p>
-            <p><strong>Цена:</strong> <?= Html::encode($model->price) ?> рублей</p>
+    <div class="photographer-info">
+        <div class="photographer-image">
+            <?= Html::img(Yii::getAlias('@web/images/' . Html::encode($model->img)), ['alt' => Html::encode($model->user->name), 'class' => 'img-responsive']) ?>
+        </div>  
+        <div class="info_actions">
+            <div class="info">
+                <p><strong>Специализация:</strong> <?= Html::encode($model->specialization) ?></p>
+                <p><strong>Почта:</strong> <?= Html::encode($model->user->email) ?></p>
+                <p><strong>Телефон:</strong> <?= Html::encode($model->user->phone) ?></p>
+                <p><strong>Стоимость услуг:</strong> <?= Html::encode($model->price) ?> рублей/час</p>
+                <p><strong>О фотографе:</strong> <?= Html::encode($model->description) ?></p>
+            </div>
+            <div class="actions">
+                <?= Html::a('Назад', ['/photographer/user-index'], ['class' => 'photog-card-btn']) ?>
+                <?= Html::a('Нанять', ['/reservation/create'], ['class' => 'photog-card-btn']) ?>
+            </div>
         </div>
+    </div>
 
     <h2>Работы</h2>    
     <?php    
@@ -62,52 +45,86 @@ $this->title = $model->user->name;
         <?php endforeach; ?>    
     </div>
 
-    <div class="actions">
-        <?= Html::a('Назад', ['/photographer/user-index'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('Нанять', ['/reservation/create'], ['class' => 'btn btn-success']) ?>
-    </div>
 </div>
 
 <style>
-.photographer-view {    
-    margin: 20px;    
-}
+    .photographer-view {    
+        margin: 20px; 
+        color: rgba(54, 51, 47, 1);   
+    }
 
-.images-gallery {    
-    display: flex;    
-    flex-wrap: wrap;    
-    justify-content: space-between; /* Отображение карты изображений с помощью пространства */
-}
+    .photographer-info {
+        display: flex;
+        gap: 20px;
+        background-color: rgba(235, 234, 237, 1);
+        border-radius: 30px;
+        padding: 20px;
+        position: relative;
+    }
 
-.image-card {    
-    margin: 10px;    
-    border: 1px solid #ccc;    
-    padding: 10px;    
-    width: calc(33.333% - 20px);    
-    box-sizing: border-box;    
-}
+    .info_actions {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
 
-.image-card img {    
-    max-width: 100%;    
-    height: auto;    
-}
+    .info p {
+        font-size: 18px;
+    }
 
-.photographer-image {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 20px 0; 
-    border: 2px solid #ddd; 
-    border-radius: 10px; 
-    background-color: #f9f9f9; 
-}
+    .images-gallery {    
+        display: flex;    
+        flex-wrap: wrap;    
+        justify-content: space-between; /* Отображение карты изображений с помощью пространства */
+    }
 
-.photographer-image img {
-    max-width: 100%; 
-    height: auto; 
-}
+    .image-card {    
+        margin: 10px;    
+        border: 1px solid #ccc;    
+        padding: 10px;    
+        width: calc(33.333% - 20px);    
+        box-sizing: border-box;    
+    }
 
-.actions {
-    margin-top: 20px;
-}
+    .image-card img {    
+        max-width: 100%;    
+        height: auto;    
+    }
+
+    .photographer-image img {
+        border-radius: 30px; 
+        max-width: auto; 
+        height: 400px; 
+    }
+
+    .actions {
+        margin-bottom: 10px;
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        align-self: flex-end; /* Выравнивание по правому краю родительского контейнера */
+        width: 100%; /* Занимает всю доступную ширину */
+        padding-right: 20px; /* Отступ от правого края */
+    }
+
+    .photog-card-btn {
+        background-color: rgba(158, 105, 58, 1) !important;
+        color: white !important;
+        border-radius: 50px !important;
+        padding: 15px 40px !important;
+        border: none !important;
+        text-decoration: none !important;
+        letter-spacing: 1px;
+        transition: background-color 0.3s ease;
+        font-size: 15px;
+    }
+
+    .photog-card-btn:hover {
+        background-color: rgb(126, 83, 45) !important;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+        margin-top: 20px;
+    }
 </style>

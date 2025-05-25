@@ -19,25 +19,26 @@ $this->title = Html::encode($model->name);
         <div class="studio-info">
             <p><strong>Местоположение:</strong> <?= Html::encode($model->location) ?></p>
             <p><strong>Описание:</strong> <?= Html::encode($model->description) ?></p>
-            <p><strong>Цена:</strong> <?= Html::encode($model->price) ?> рублей</p>
+            <p><strong>Цена:</strong> <?= Html::encode($model->price) ?> рублей/час</p>
             <p><strong>Размеры:</strong> <?= Html::encode($model->dimensions) ?> квадратных метров</p>
         </div>
     </div>
 
     <p class="buttons">
-        <?= Html::a('Назад', ['user-index'], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Забронировать', ['/reservation/create'], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Назад', ['user-index'], ['class' => 'studio-card-btn']) ?>
+        <?= Html::a('Забронировать', ['/reservation/create'], ['class' => 'studio-card-btn']) ?>
     </p>
 </div>
 
 <style>
     .studio-view {
         position: relative;
-        background-color: #f9f9f9; /* Светлый фон для страницы */
+        background-color: rgba(235, 234, 237, 1); /* Светлый фон для страницы */
         border-radius: 8px; /* Скруглённые углы */
         padding: 20px; /* Отступы внутри страницы */
         margin: 20px; /* Отступы снаружи */
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Тень */
+        color: rgba(54, 51, 47, 1);
+        /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
     }
 
     .studio-details {
@@ -70,5 +71,23 @@ $this->title = Html::encode($model->name);
         right: 20px; /* Отступ от правого края */
         display: flex;
         gap: 10px; /* Интервал между кнопками */
+    }
+    
+    .studio-card-btn {
+        background-color: rgba(158, 105, 58, 1) !important;
+        color: white !important;
+        border-radius: 50px !important;
+        padding: 10px 35px !important;
+        border: none !important;
+        text-decoration: none !important;
+        letter-spacing: 1px;
+        transition: background-color 0.3s ease;
+        font-size: 15px;
+    }
+
+    .studio-card-btn:hover {
+        background-color: rgb(126, 83, 45) !important;
+        /* transform: translateY(-2px); */
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
 </style>

@@ -48,6 +48,17 @@ class ReservationController extends Controller
         ]);
     }
 
+    public function actionUserIndex()
+    {
+        $searchModel = new ReservationSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
+        return $this->render('user-index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
     /**
      * Displays a single Reservation model.
      * @param int $id ID

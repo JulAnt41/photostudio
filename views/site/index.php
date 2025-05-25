@@ -25,7 +25,7 @@ $this->registerCssFile('@web/css/style.css', [
         } else if (Yii::$app->user->identity->id_role === 3) {
             echo '<p><a class="btn btn-lg btn-main" href="photographer/photographer-index">Перейти в панель фотографа</a></p>';
         } else { // Если не гость и не админ
-            echo '<p><a class="btn btn-lg btn-main" href="reservation/index">Просмотреть мои фотосессии</a></p>';
+            echo '<p><a class="btn btn-lg btn-main" href="reservation/user-index">Просмотреть мои фотосессии</a></p>';
         }
     ?>
 </div>

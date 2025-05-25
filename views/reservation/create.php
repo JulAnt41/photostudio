@@ -5,7 +5,7 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Reservation $model */
 
-$this->title = 'Забронировать фотосъемку';
+// $this->title = 'Забронировать фотосъемку';
 // $this->params['breadcrumbs'][] = ['label' => 'Reservations', 'url' => ['index']];
 // $this->params['breadcrumbs'][] = $this->title;
 ?>
