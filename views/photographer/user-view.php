@@ -23,10 +23,24 @@ $this->title = $model->user->name;
                 <p><strong>Стоимость услуг:</strong> <?= Html::encode($model->price) ?> рублей/час</p>
                 <p><strong>О фотографе:</strong> <?= Html::encode($model->description) ?></p>
             </div>
-            <div class="actions">
+            <!-- <div class="actions">
                 <?= Html::a('Назад', ['/photographer/user-index'], ['class' => 'photog-card-btn']) ?>
                 <?= Html::a('Нанять', ['/reservation/create'], ['class' => 'photog-card-btn']) ?>
-            </div>
+            </div> -->
+
+            <div class="actions">
+                <?= Html::a('Назад', ['/photographer/user-index'], ['class' => 'photog-card-btn']) ?>
+                <?php if (Yii::$app->user->isGuest): ?>
+                    <?= Html::a('Нанять', ['/user/create', 'message' => 'Чтобы нанять фотографа, необходимо зарегистрироваться.'],
+                        ['class' => 'photog-card-btn']) ?>
+                <?php elseif (Yii::$app->user->identity->role == 1): ?>
+                    <?= Html::a('Нанять', ['/reservation/create', 'id' => $model->id], ['class' => 'photog-card-btn']) ?>
+                <?php else: ?>
+                    <?= Html::a('Нанять', ['/user/create', 'message' => 'Только пользователи могут нанять фотографа.'], 
+                        ['class' => 'photog-card-btn']) ?>
+                <?php endif; ?>
+            </div> 
+
         </div>
     </div>
 

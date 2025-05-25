@@ -24,10 +24,19 @@ $this->title = Html::encode($model->name);
         </div>
     </div>
 
-    <p class="buttons">
+    <div class="buttons">
         <?= Html::a('Назад', ['user-index'], ['class' => 'studio-card-btn']) ?>
-        <?= Html::a('Забронировать', ['/reservation/create'], ['class' => 'studio-card-btn']) ?>
-    </p>
+        <?php if (Yii::$app->user->isGuest): ?>
+            <?= Html::a('Забронировать', ['/user/create', 'message' => 'Чтобы забронировать студию, необходимо зарегистрироваться.'],
+                ['class' => 'studio-card-btn']) ?>
+        <?php elseif (Yii::$app->user->identity->role == 1): ?>
+            <?= Html::a('Забронировать', ['/reservation/create', 'id' => $model->id], ['class' => 'studio-card-btn']) ?>
+        <?php else: ?>
+            <?= Html::a('Забронировать', ['/user/create', 'message' => 'Только пользователи могут забронировать студию.'], 
+                ['class' => 'studio-card-btn']) ?>
+        <?php endif; ?>
+    </div> 
+    
 </div>
 
 <style>

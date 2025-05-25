@@ -27,9 +27,18 @@
 </div>
     
     <div class="buttons">
-        <p><?= Html::a('Просмотреть', ['photographer/user-view', 'id' => $model->id], ['class' => 'photog-card-btn']) ?></p>
-        <p><?= Html::a('Нанять', ['reservation/create'], ['class' => 'photog-card-btn']) ?></p>
-    </div>
+        <?= Html::a('Просмотреть', ['photographer/user-view', 'id' => $model->id], ['class' => 'photog-card-btn']) ?>
+        <?php if (Yii::$app->user->isGuest): ?>
+            <?= Html::a('Нанять', ['/user/create', 'message' => 'Чтобы нанять фотографа, необходимо зарегистрироваться.'],
+                ['class' => 'photog-card-btn']) ?>
+        <?php elseif (Yii::$app->user->identity->role == 1): ?>
+            <?= Html::a('Нанять', ['/reservation/create', 'id' => $model->id], ['class' => 'photog-card-btn']) ?>
+        <?php else: ?>
+            <?= Html::a('Нанять', ['/user/create', 'message' => 'Только пользователи могут нанять фотографа.'], 
+                ['class' => 'photog-card-btn']) ?>
+        <?php endif; ?>
+    </div> 
+    
 </div>
 
 <style>

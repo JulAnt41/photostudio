@@ -68,6 +68,14 @@ class UserController extends Controller
      */
     public function actionCreate()
     {
+        // if (Yii::$app->request->get('message')) {
+        //     Yii::$app->session->setFlash('info', Yii::$app->request->get('message'));
+        // }
+
+        if ($message = Yii::$app->request->get('message')) {
+            Yii::$app->session->setFlash('info', $message);
+        }
+
         $model = new User();
     
          if ($model->load(Yii::$app->request->post())) {
