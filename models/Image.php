@@ -3,61 +3,49 @@
 namespace app\models;
 
 use Yii;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "image".
- *
- * @property int $id
- * @property int $id_photographer
- * @property string $img
- *
- * @property Photographer $photographer
  */
 class Image extends \yii\db\ActiveRecord
 {
+    public $imageFile; // Виртуальное свойство для загрузки файла
 
-
-    /**
-     * {@inheritdoc}
-     */
     public static function tableName()
     {
         return 'image';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function rules()
-    {
-        return [
-            [['id_photographer', 'img'], 'required'],
-            [['id_photographer'], 'integer'],
-            [['img'], 'string', 'max' => 255],
-            [['id_photographer'], 'exist', 'skipOnError' => true, 'targetClass' => Photographer::class, 'targetAttribute' => ['id_photographer' => 'id']],
-        ];
-    }
+public function rules()
+{
+    return [
+        [['id_photographer'], 'required'],
+        [['id_photographer'], 'integer'],
+        [['img'], 'string', 'max' => 255],
+        [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, jpeg'],
+    ];
+}
 
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'id_photographer' => 'Id Photographer',
-            'img' => 'Img',
+            'imageFile' => 'Фотография',
+            'id_photographer' => 'Фотограф',
         ];
     }
 
-    /**
-     * Gets query for [[Photographer]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getPhotographer()
-    {
-        return $this->hasOne(Photographer::class, ['id' => 'id_photographer']);
+public function upload()
+{
+    if ($this->validate()) {
+        $filename = 'img_'.time().'_'.Yii::$app->security->generateRandomString(6).'.'.$this->imageFile->extension;
+        $path = Yii::getAlias('@webroot/images/'.$filename);
+        
+        if ($this->imageFile->saveAs($path)) {
+            $this->img = $filename;
+            return true;
+        }
     }
-
+    return false;
+}
 }

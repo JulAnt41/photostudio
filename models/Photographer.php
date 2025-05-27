@@ -90,4 +90,9 @@ class Photographer extends \yii\db\ActiveRecord
         return $this->hasOne(User::class, ['id' => 'id_user']);
     }
 
+    public static function findByUserId($userId)
+    {
+        return static::findOne(['id_user' => $userId]);
+    }
+
 }
