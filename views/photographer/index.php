@@ -47,6 +47,29 @@ $this->title = 'Фотографы';
                 'label' => 'Описание',
             ],
             [
+                'attribute' => 'img',
+                'format' => 'raw',
+                'value' => function($model) {
+                    $imagePath = Yii::getAlias('@web/images/') . $model->img;
+                    $imageExists = file_exists(Yii::getAlias('@webroot/images/') . $model->img);
+                    
+                    $imageContent = $imageExists 
+                        ? Html::img($imagePath, [
+                            'class' => 'img-thumbnail',
+                            'style' => 'width: 80px; height: 80px; object-fit: cover;',
+                            'alt' => $model->img,
+                          ])
+                        : Html::tag('span', 'Нет изображения', ['class' => 'text-muted']);
+                    
+                    return Html::tag('div', 
+                        $imageContent . Html::tag('span', $model->img, ['class' => 'image-name']),
+                        ['class' => 'image-preview-container']
+                    );
+                },
+                'contentOptions' => ['style' => 'vertical-align: middle;'],
+                'label' => 'Фото'
+            ],
+            [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Photographer $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);

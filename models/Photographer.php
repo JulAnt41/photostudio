@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "photographer".
@@ -20,7 +21,7 @@ use Yii;
  */
 class Photographer extends \yii\db\ActiveRecord
 {
-
+    public $imageFile;
 
     /**
      * {@inheritdoc}
@@ -42,6 +43,8 @@ class Photographer extends \yii\db\ActiveRecord
             [['description'], 'string'],
             [['specialization', 'img'], 'string', 'max' => 255],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['id_user' => 'id']],
+            [['img'], 'string', 'max' => 255],
+            [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, jpeg'],
         ];
     }
 
@@ -93,6 +96,25 @@ class Photographer extends \yii\db\ActiveRecord
     public static function findByUserId($userId)
     {
         return static::findOne(['id_user' => $userId]);
+    }
+
+    public function upload()
+    {
+        if ($this->validate()) {
+            $directory = Yii::getAlias('@webroot/images/');
+            if (!file_exists($directory)) {
+                mkdir($directory, 0777, true);
+            }
+            
+            $filename = 'img_'.time().'_'.Yii::$app->security->generateRandomString(6).'.'.$this->imageFile->extension;
+            $path = $directory . $filename;
+            
+            if ($this->imageFile->saveAs($path)) {
+                $this->img = $filename;
+                return true;
+            }
+        }
+        return false;
     }
 
 }

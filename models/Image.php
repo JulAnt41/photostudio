@@ -35,17 +35,17 @@ public function rules()
         ];
     }
 
-public function upload()
-{
-    if ($this->validate()) {
-        $filename = 'img_'.time().'_'.Yii::$app->security->generateRandomString(6).'.'.$this->imageFile->extension;
-        $path = Yii::getAlias('@webroot/images/'.$filename);
-        
-        if ($this->imageFile->saveAs($path)) {
-            $this->img = $filename;
-            return true;
+    public function upload()
+    {
+        if ($this->validate()) {
+            $filename = 'img_'.time().'_'.Yii::$app->security->generateRandomString(6).'.'.$this->imageFile->extension;
+            $path = Yii::getAlias('@webroot/images/'.$filename);
+            
+            if ($this->imageFile->saveAs($path)) {
+                $this->img = $filename;
+                return true;
+            }
         }
+        return false;
     }
-    return false;
-}
 }
