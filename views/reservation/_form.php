@@ -50,14 +50,31 @@ $this->registerCssFile('@web/css/style.css', [
             ['prompt' => 'Выберите фотографа']
         )->label('Фотограф') ?>
 
-        <?= $form->field($model, 'date', [
-            'inputOptions' => [
-                'class' => 'form-control input-field',
-                'placeholder' => 'гггг-мм-дд'
-            ]
-        ])->widget(\yii\widgets\MaskedInput::class, [
-            'mask' => '9999-99-99',
+        <?= $form->field($model, 'date')->input('date', [
+            'class' => 'form-control',
+            'min' => date('Y-m-d'), // минимальная дата - сегодня
         ])->label('Дата фотосъемки') ?>
+
+        <?= $form->field($model, 'start_time')->dropDownList(
+            [
+                '09:00' => '09:00',
+                '10:00' => '10:00',
+                '11:00' => '11:00',
+                '12:00' => '12:00',
+                '13:00' => '13:00',
+                '14:00' => '14:00',
+                '15:00' => '15:00',
+                '16:00' => '16:00',
+                '17:00' => '17:00',
+                '18:00' => '18:00',
+            ],
+            ['prompt' => 'Выберите время начала']
+        )->label('Время начала') ?>
+
+        <?= $form->field($model, 'hours_count')->dropDownList(
+            [1 => '1 час', 2 => '2 часа', 3 => '3 часа', 4 => '4 часа'],
+            ['prompt' => 'Выберите продолжительность']
+        )->label('Продолжительность') ?>
 
         <?= $form->field($model, 'id_payment', [
             'inputOptions' => [
@@ -75,6 +92,88 @@ $this->registerCssFile('@web/css/style.css', [
                 'placeholder' => 'Ваши комментарии и пожелания'
             ]
         ])->textarea(['rows' => 4])->label('Комментарий/пожелания') ?>
+
+        <div class="form-group">
+            <label class="control-label">Предварительная стоимость</label>
+            <div id="price-calculation" style="font-size: 18px; font-weight: bold;">
+                0 руб.
+            </div>
+        </div>
+
+<?php
+$this->registerJs(<<<JS
+function calculatePrice() {
+    var id_studio = $('#reservation-id_studio').val();
+    var id_photographer = $('#reservation-id_photographer').val();
+    var hours = $('#reservation-hours_count').val();
+    
+    if (!id_studio || !id_photographer || !hours) {
+        $('#price-calculation').text('0 руб.');
+        return;
+    }
+    
+    $.get('/web/reservation/calculate-price', {
+        id_studio: id_studio,
+        id_photographer: id_photographer,
+        hours: hours
+    })
+    .done(function(data) {
+        if (data.price) {
+            $('#price-calculation').text(data.price);
+        } else {
+            $('#price-calculation').text('Ошибка: ' + (data.error || 'неизвестная'));
+        }
+    })
+    .fail(function() {
+        $('#price-calculation').text('Ошибка сервера');
+    });
+}
+
+function checkAvailability() {
+    var id_studio = $('#reservation-id_studio').val();
+    var id_photographer = $('#reservation-id_photographer').val();
+    var date = $('#reservation-date').val();
+    
+    if (id_studio && id_photographer && date) {
+        $.get('/web/reservation/check-availability', {
+            id_studio: id_studio,
+            id_photographer: id_photographer,
+            date: date
+        }, function(data) {
+            if (data.busyTimes) {
+                // Enable all options first
+                $('#reservation-start_time option').prop('disabled', false);
+                
+                // Disable busy times
+                $.each(data.busyTimes, function(index, time) {
+                    $('#reservation-start_time option[value="' + time + '"]').prop('disabled', true);
+                });
+                
+                // Reset selection if current time is now unavailable
+                var selectedTime = $('#reservation-start_time').val();
+                if (selectedTime && data.busyTimes.includes(selectedTime)) {
+                    $('#reservation-start_time').val('');
+                }
+            }
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            console.error('Ошибка при проверке доступности: ' + textStatus);
+        });
+    }
+}
+
+$(document).ready(function() {
+    calculatePrice();
+    
+    $('#reservation-id_studio, #reservation-id_photographer, #reservation-hours_count').on('change', function() {
+        calculatePrice();
+    });
+    
+    $('#reservation-date, #reservation-id_studio, #reservation-id_photographer').on('change', function() {
+        checkAvailability();
+    });
+});
+JS
+); ?>
 
         <div class="form-group submit-group">
             <?= Html::submitButton('Забронировать', [

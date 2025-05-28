@@ -44,6 +44,27 @@ class ReservationSearch extends Reservation
     {
         $query = Reservation::find();
 
+        // Добавляем условие для текущего фотографа
+        if (!Yii::$app->user->isGuest && ($photographer = Yii::$app->user->identity->photographer)) {
+            $query->andWhere(['id_photographer' => $photographer->id]);
+        }
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'sort' => [
+                'defaultOrder' => [
+                    'date' => SORT_ASC,
+                    'start_time' => SORT_ASC,
+                ]
+            ]
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+
         //Если обычный пользователь выводим только его заявки
         if (Yii::$app->user->identity->id_role === 1) {
             $query->andWhere(['id_user' => Yii::$app->user->id]);

@@ -12,9 +12,6 @@ use app\models\ContactForm;
 
 class SiteController extends Controller
 {
-    /**
-     * {@inheritdoc}
-     */
     public function behaviors()
     {
         return [
@@ -38,9 +35,6 @@ class SiteController extends Controller
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function actions()
     {
         return [
@@ -54,21 +48,11 @@ class SiteController extends Controller
         ];
     }
 
-    /**
-     * Displays homepage.
-     *
-     * @return string
-     */
     public function actionIndex()
     {
         return $this->render('index');
     }
 
-    /**
-     * Login action.
-     *
-     * @return Response|string
-     */
     public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
@@ -86,11 +70,6 @@ class SiteController extends Controller
         ]);
     }
 
-    /**
-     * Logout action.
-     *
-     * @return Response
-     */
     public function actionLogout()
     {
         Yii::$app->user->logout();
@@ -98,11 +77,6 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
-    /**
-     * Displays contact page.
-     *
-     * @return Response|string
-     */
     public function actionContact()
     {
         $model = new ContactForm();
@@ -116,13 +90,30 @@ class SiteController extends Controller
         ]);
     }
 
-    /**
-     * Displays about page.
-     *
-     * @return string
-     */
     public function actionAbout()
     {
         return $this->render('about');
+    }
+
+    public function actionMyPhotos()
+    {
+        // Получаем ID текущего пользователя
+        $userId = Yii::$app->user->id;
+
+        // Находим фотографа, связанного с этим пользователем
+        $photographer = Photographer::findOne(['id_user' => $userId]);
+
+        if (!$photographer) {
+            throw new \yii\web\NotFoundHttpException('Вы не фотограф!');
+        }
+
+        // Получаем все его фотографии
+        $photos = Image::find()
+            ->where(['id_photographer' => $photographer->id])
+            ->all();
+
+        return $this->render('index', [
+            'photos' => $photos,
+        ]);
     }
 }

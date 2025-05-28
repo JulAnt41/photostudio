@@ -97,6 +97,11 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return $this->hasMany(Photographer::class, ['id_user' => 'id']);
     }
 
+    public function getPhotographer()
+    {
+        return $this->hasOne(Photographer::class, ['id_user' => 'id']);
+    }
+
     /**
      * Gets query for [[Reservations]].
      *

@@ -43,14 +43,24 @@ $this->title = 'Бронирование №' . $model->id;
                     'label' => 'Фотограф'
                 ],
                 [
-                    'attribute' => 'date',
-                    'label' => 'Дата фотосъемки',
-                    'format' => ['datetime', 'php:d.m.Y H:i']
-                ],
-                [
                     'attribute' => 'created_at',
                     'label' => 'Дата бронирования',
-                    'format' => ['datetime', 'php:d.m.Y H:i']
+                    'format' => ['datetime', 'php:d.m.Y']
+                ],
+                [
+                    'attribute' => 'date',
+                    'label' => 'Дата фотосъемки',
+                    'format' => ['datetime', 'php:d.m.Y']
+                ],
+                [
+                    'attribute' => 'start_time',
+                    'label' => 'Начало съемки',
+                    'format' => ['time', 'HH:mm']
+                ],
+                [
+                    'attribute' => 'end_time',
+                    'label' => 'Конец съемки',
+                    'format' => ['time', 'HH:mm']
                 ],
                 [
                     'attribute' => 'price',

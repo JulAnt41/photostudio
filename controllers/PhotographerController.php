@@ -162,4 +162,21 @@ class PhotographerController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+    public function actionMyPhotos()
+    {
+        // Получаем id фотографа (например, из сессии или Auth)
+        $id_photographer = Yii::$app->user->identity->photographer->id; // если связь есть
+        
+        // Или, если id передаётся параметром:
+        // $id_photographer = Yii::$app->request->get('id_photographer');
+        
+        $photos = Image::find()
+            ->where(['id_photographer' => $id_photographer])
+            ->all();
+        
+        return $this->render('my-photos', [
+            'photos' => $photos,
+        ]);
+    }
 }

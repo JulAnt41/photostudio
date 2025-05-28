@@ -2,18 +2,13 @@
 
 namespace app\models;
 
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Image;
 
-/**
- * ImageSearch represents the model behind the search form of `app\models\Image`.
- */
 class ImageSearch extends Image
 {
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
@@ -22,34 +17,34 @@ class ImageSearch extends Image
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function scenarios()
     {
         // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
 
-    /**
-     * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     * @param string|null $formName Form name to be used into `->load()` method.
-     *
-     * @return ActiveDataProvider
-     */
-    public function search($params, $formName = null)
+    public function search($params)
     {
         $query = Image::find();
 
-        // add conditions that should always apply here
+        // Добавляем условие для фотографа
+        if (!Yii::$app->user->isGuest && Yii::$app->user->identity->photographer) {
+            $query->andWhere(['id_photographer' => Yii::$app->user->identity->photographer->id]);
+        }
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 20,
+            ],
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC,
+                ]
+            ],
         ]);
 
-        $this->load($params, $formName);
+        $this->load($params);
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
@@ -57,13 +52,7 @@ class ImageSearch extends Image
             return $dataProvider;
         }
 
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'id' => $this->id,
-            'id_photographer' => $this->id_photographer,
-        ]);
-
-        $query->andFilterWhere(['like', 'img', $this->img]);
+        // Здесь могут быть другие условия поиска
 
         return $dataProvider;
     }

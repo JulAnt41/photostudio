@@ -11,7 +11,7 @@ $this->title = 'Панель фотографа';
     <h1 class="text-center"><?= Html::encode($this->title) ?></h1>
 
     <div class="admin-buttons-container">
-        <?= Html::a('Фотосессии', ['photographer-view'], ['class' => 'btn btn-custom btn-lg']) ?>
+        <?= Html::a('Фотосессии', ['/reservation/photographer-index'], ['class' => 'btn btn-custom btn-lg']) ?>
         <?= Html::a('Фотографии', ['/image/index'], ['class' => 'btn btn-custom btn-lg']) ?>
     </div>
 

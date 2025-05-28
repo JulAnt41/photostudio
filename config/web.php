@@ -48,6 +48,8 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'reservation/calculate-price' => 'reservation/calculate-price',
+                'reservation/check-availability' => 'reservation/check-availability',
             ],
         ],
         

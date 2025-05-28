@@ -8,15 +8,12 @@ use app\models\ReservationSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use \yii\web\Response;
+use app\models\Studio;
+use app\models\Photographer;
 
-/**
- * ReservationController implements the CRUD actions for Reservation model.
- */
 class ReservationController extends Controller
 {
-    /**
-     * @inheritDoc
-     */
     public function behaviors()
     {
         return array_merge(
@@ -32,11 +29,6 @@ class ReservationController extends Controller
         );
     }
 
-    /**
-     * Lists all Reservation models.
-     *
-     * @return string
-     */
     public function actionIndex()
     {
         $searchModel = new ReservationSearch();
@@ -59,12 +51,25 @@ class ReservationController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Reservation model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+    public function actionPhotographerIndex()
+    {
+        // Проверяем, является ли пользователь фотографом
+        if (Yii::$app->user->isGuest || !Yii::$app->user->identity->photographer) {
+            throw new \yii\web\ForbiddenHttpException('Доступ только для фотографов');
+        }
+
+        $searchModel = new ReservationSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        // Фильтруем только предстоящие съемки (по желанию)
+        $dataProvider->query->andWhere(['>=', 'date', date('Y-m-d')]);
+
+        return $this->render('photographer-index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
     public function actionView($id)
     {
         return $this->render('view', [
@@ -72,11 +77,6 @@ class ReservationController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new Reservation model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
-     */
     public function actionCreate()
     {
         $model = new Reservation();
@@ -84,30 +84,15 @@ class ReservationController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['user-index', 'id' => $model->id]);
             }
         }
-
-        // if ($this->request->isPost) {
-        //     if ($model->load($this->request->post()) && $model->save()) {
-        //         return $this->redirect(['view', 'id' => $model->id]);
-        //     }
-        // } else {
-        //     $model->loadDefaultValues();
-        // }
 
         return $this->render('create', [
             'model' => $model,
         ]);
     }
 
-    /**
-     * Updates an existing Reservation model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -121,13 +106,6 @@ class ReservationController extends Controller
         ]);
     }
 
-    /**
-     * Deletes an existing Reservation model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $id ID
-     * @return \yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -135,13 +113,6 @@ class ReservationController extends Controller
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Reservation model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $id ID
-     * @return Reservation the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = Reservation::findOne(['id' => $id])) !== null) {
@@ -169,5 +140,77 @@ class ReservationController extends Controller
         // Перенаправление на страницу просмотра
         return $this->redirect(['view', 'id' => $id]);
     }
+
+public function actionCalculatePrice()
+{
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    
+    try {
+        $id_studio = (int)Yii::$app->request->get('id_studio');
+        $id_photographer = (int)Yii::$app->request->get('id_photographer');
+        $hours = (int)Yii::$app->request->get('hours');
+        
+        if (!$id_studio || !$id_photographer || !$hours) {
+            throw new \Exception('Укажите студию, фотографа и длительность');
+        }
+        
+        $studio = Studio::findOne($id_studio);
+        $photographer = Photographer::findOne($id_photographer);
+        
+        if (!$studio) throw new \Exception('Студия не найдена');
+        if (!$photographer) throw new \Exception('Фотограф не найден');
+        
+        $price = ($studio->price + $photographer->price) * $hours;
+        return ['price' => $price . ' руб.'];
+        
+    } catch (\Exception $e) {
+        return ['error' => $e->getMessage()];
+    }
+}
+
+public function actionCheckAvailability()
+{
+    Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+    
+    $id_studio = Yii::$app->request->get('id_studio');
+    $id_photographer = Yii::$app->request->get('id_photographer');
+    $date = Yii::$app->request->get('date');
+    
+    if (empty($id_studio) || empty($id_photographer) || empty($date)) {
+        return ['error' => 'Не все параметры указаны', 'busyTimes' => []];
+    }
+    
+    try {
+        $busyTimes = [];
+        $reservations = Reservation::find()
+            ->where(['date' => $date])
+            ->andWhere(['or', 
+                ['id_studio' => $id_studio],
+                ['id_photographer' => $id_photographer]
+            ])
+            ->all();
+        
+        foreach ($reservations as $reservation) {
+            $start = strtotime($reservation->start_time);
+            $end = strtotime($reservation->end_time);
+            
+            if ($start === false || $end === false) {
+                continue;
+            }
+            
+            for ($time = $start; $time < $end; $time += 3600) {
+                $timeStr = date('H:i', $time);
+                if (!in_array($timeStr, $busyTimes)) {
+                    $busyTimes[] = $timeStr;
+                }
+            }
+        }
+        
+        return ['busyTimes' => $busyTimes];
+    } catch (\Exception $e) {
+        Yii::error("Error checking availability: " . $e->getMessage());
+        return ['error' => $e->getMessage(), 'busyTimes' => []];
+    }
+}
     
 }

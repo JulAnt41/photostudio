@@ -52,16 +52,25 @@ $this->title = 'Бронирования';
             //     'label' => 'Услуга',
             //     'filter' => ArrayHelper::map(Service::find()->all(), 'id', 'type')
             // ],
-            
+            [
+                'attribute' => 'created_at',
+                'label' => 'Дата бронирования',
+                'format' => ['datetime', 'php:d.m.Y']
+            ],
             [
                 'attribute' => 'date',
                 'label' => 'Дата фотосъемки',
                 'format' => ['datetime', 'php:d.m.Y']
             ],
             [
-                'attribute' => 'created_at',
-                'label' => 'Дата бронирования',
-                'format' => ['datetime', 'php:d.m.Y']
+                'attribute' => 'start_time',
+                'label' => 'Начало съемки',
+                'format' => ['time', 'HH:mm'],
+            ],
+            [
+                'attribute' => 'end_time',
+                'label' => 'Конец съемки',
+                'format' => ['time', 'HH:mm'],
             ],
             [
                 'attribute' => 'price',

@@ -45,6 +45,13 @@ $this->registerCssFile('@web/css/style.css', [
                         <span class="info-value"><?= Yii::$app->formatter->asDate($reservation->date, 'php:d.m.Y') ?></span>
                     </div>
                     <div class="info-row">
+                        <span class="info-label">Время:</span>
+                        <span class="info-value">
+                            <?= Yii::$app->formatter->asTime($reservation->start_time, 'HH:mm') . ' - ' . 
+                            Yii::$app->formatter->asTime($reservation->end_time, 'HH:mm') ?>
+                        </span>
+                    </div>
+                    <div class="info-row">
                         <span class="info-label">Стоимость:</span>
                         <span class="info-value"><?= number_format($reservation->price, 0, '', ' ') ?> ₽</span>
                     </div>
