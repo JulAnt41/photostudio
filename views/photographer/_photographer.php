@@ -89,7 +89,9 @@
 
     .portfolio-slider {
         display: flex;
-        overflow-x: auto;
+        transform-style: preserve-3d;
+        will-change: transform;
+        overflow-x: hidden;
         scroll-behavior: smooth;
         -webkit-overflow-scrolling: touch;
         scroll-snap-type: x mandatory;
@@ -166,23 +168,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const prevBtn = document.querySelector('.prev-arrow');
     const nextBtn = document.querySelector('.next-arrow');
     const slides = document.querySelectorAll('.portfolio-slide');
-    const slideWidth = slides[0]?.offsetWidth + 10; // 10px gap
     
     if (slides.length > 0) {
-        let currentPosition = 0;
-        const maxPosition = -(slides.length * slideWidth - slider.offsetWidth);
+        let currentIndex = 0;
+        const slideWidth = 210; // 200px + 10px gap
         
         prevBtn.addEventListener('click', function() {
-            currentPosition = Math.min(currentPosition + slideWidth, 0);
-            slider.style.transform = `translateX(${currentPosition}px)`;
+            currentIndex = Math.max(currentIndex - 1, 0);
+            slider.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
         });
         
         nextBtn.addEventListener('click', function() {
-            currentPosition = Math.max(currentPosition - slideWidth, maxPosition);
-            slider.style.transform = `translateX(${currentPosition}px)`;
+            currentIndex = Math.min(currentIndex + 1, slides.length - 1);
+            slider.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
         });
+        
+        slider.style.transition = 'transform 0.3s ease';
     } else {
-        // Если нет фотографий, скрываем стрелки
         prevBtn.style.display = 'none';
         nextBtn.style.display = 'none';
     }

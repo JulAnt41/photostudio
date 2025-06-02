@@ -1,11 +1,42 @@
 <?php 
 use yii\helpers\Html; 
-use yii\widgets\DetailView; 
 use yii\data\ActiveDataProvider; 
 use app\models\Image; 
 use app\models\Photographer; 
 
 $this->title = $model->user->name; 
+$this->registerJs('
+    document.querySelectorAll(".photo-square").forEach(item => {
+        item.addEventListener("click", function() {
+            const imgSrc = this.querySelector("img").src;
+            const modal = document.createElement("div");
+            modal.style.position = "fixed";
+            modal.style.top = "0";
+            modal.style.left = "0";
+            modal.style.width = "100%";
+            modal.style.height = "100%";
+            modal.style.backgroundColor = "rgba(0,0,0,0.9)";
+            modal.style.display = "flex";
+            modal.style.alignItems = "center";
+            modal.style.justifyContent = "center";
+            modal.style.zIndex = "1000";
+            modal.style.cursor = "pointer";
+            
+            const img = document.createElement("img");
+            img.src = imgSrc;
+            img.style.maxWidth = "90%";
+            img.style.maxHeight = "90%";
+            img.style.objectFit = "contain";
+            
+            modal.appendChild(img);
+            document.body.appendChild(modal);
+            
+            modal.addEventListener("click", function() {
+                document.body.removeChild(modal);
+            });
+        });
+    });
+');
 ?>
 
 <div class="photographer-view">    
@@ -23,24 +54,19 @@ $this->title = $model->user->name;
                 <p><strong>Стоимость услуг:</strong> <?= Html::encode($model->price) ?> рублей/час</p>
                 <p><strong>О фотографе:</strong> <?= Html::encode($model->description) ?></p>
             </div>
-            <!-- <div class="actions">
-                <?= Html::a('Назад', ['/photographer/user-index'], ['class' => 'photog-card-btn']) ?>
-                <?= Html::a('Нанять', ['/reservation/create'], ['class' => 'photog-card-btn']) ?>
-            </div> -->
 
             <div class="actions">
-                <?= Html::a('Назад', ['/photographer/user-index'], ['class' => 'photog-card-btn']) ?>
+                <?= Html::a('Назад', ['/photographer/user-index'], ['class' => 'btn']) ?>
                 <?php if (Yii::$app->user->isGuest): ?>
                     <?= Html::a('Нанять', ['/user/create', 'message' => 'Чтобы нанять фотографа, необходимо зарегистрироваться.'],
-                        ['class' => 'photog-card-btn']) ?>
+                        ['class' => 'btn']) ?>
                 <?php elseif (Yii::$app->user->identity->role == 1): ?>
-                    <?= Html::a('Нанять', ['/reservation/create', 'id' => $model->id], ['class' => 'photog-card-btn']) ?>
+                    <?= Html::a('Нанять', ['/reservation/create', 'id' => $model->id], ['class' => 'btn']) ?>
                 <?php else: ?>
                     <?= Html::a('Нанять', ['/user/create', 'message' => 'Только пользователи могут нанять фотографа.'], 
-                        ['class' => 'photog-card-btn']) ?>
+                        ['class' => 'btn']) ?>
                 <?php endif; ?>
             </div> 
-
         </div>
     </div>
 
@@ -51,94 +77,123 @@ $this->title = $model->user->name;
     ]);    
     ?>    
 
-    <div class="images-gallery">        
+    <div class="square-gallery">        
         <?php foreach ($dataProvider->getModels() as $image): ?>            
-            <div class="image-card">                
-                <?= Html::img(Yii::getAlias('@web/images/' . Html::encode($image->img)), ['alt' => 'Изображение', 'class' => 'img-responsive']) ?>            
+            <div class="photo-square">                
+                <?= Html::img(Yii::getAlias('@web/images/' . Html::encode($image->img)), ['alt' => 'Изображение', 'class' => 'square-img']) ?>            
             </div>        
         <?php endforeach; ?>    
     </div>
-
 </div>
 
 <style>
     .photographer-view {    
-        margin: 20px; 
-        color: rgba(54, 51, 47, 1);   
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
     }
-
+    
     .photographer-info {
         display: flex;
-        gap: 20px;
-        background-color: rgba(235, 234, 237, 1);
-        border-radius: 30px;
-        padding: 20px;
-        position: relative;
+        gap: 30px;
+        margin-bottom: 30px;
     }
-
-    .info_actions {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    .info p {
-        font-size: 18px;
-    }
-
-    .images-gallery {    
-        display: flex;    
-        flex-wrap: wrap;    
-        justify-content: space-between; /* Отображение карты изображений с помощью пространства */
-    }
-
-    .image-card {    
-        margin: 10px;    
-        border: 1px solid #ccc;    
-        padding: 10px;    
-        width: calc(33.333% - 20px);    
-        box-sizing: border-box;    
-    }
-
-    .image-card img {    
-        max-width: 100%;    
-        height: auto;    
-    }
-
+    
     .photographer-image img {
-        border-radius: 30px; 
-        max-width: auto; 
-        height: 400px; 
+        width: 300px;
+        height: 300px;
+        object-fit: cover;
+        border-radius: 15px;
     }
-
+    
+    .info p {
+        margin: 10px 0;
+    }
+    
+    .square-gallery {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 15px;
+    }
+    
+    .photo-square {
+        aspect-ratio: 1/1;
+        overflow: hidden;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+    
+    .square-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s;
+    }
+    
+    .photo-square:hover .square-img {
+        transform: scale(1.05);
+    }
+    
     .actions {
-        margin-bottom: 10px;
         display: flex;
         gap: 10px;
-        justify-content: flex-end;
-        align-self: flex-end; /* Выравнивание по правому краю родительского контейнера */
-        width: 100%; /* Занимает всю доступную ширину */
-        padding-right: 20px; /* Отступ от правого края */
+        margin-top: 20px;
+    }
+    
+    .btn {
+        background: #9e693a;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
     }
 
-    .photog-card-btn {
-        background-color: rgba(158, 105, 58, 1) !important;
-        color: white !important;
-        border-radius: 50px !important;
-        padding: 15px 40px !important;
-        border: none !important;
-        text-decoration: none !important;
-        letter-spacing: 1px;
-        transition: background-color 0.3s ease;
-        font-size: 15px;
-    }
-
-    .photog-card-btn:hover {
+    .btn:hover {
         background-color: rgb(126, 83, 45) !important;
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        color: white;
     }
-
-    h2 {
-        margin-top: 20px;
+    
+    @media (max-width: 768px) {
+        .photographer-info {
+            flex-direction: column;
+        }
+        
+        .photographer-image img {
+            width: 100%;
+        }
+        
+        .square-gallery {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .square-gallery {
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            margin-left: -10px;
+            margin-right: -10px;
+            padding-left: 10px;
+            padding-right: 10px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
     }
 </style>
