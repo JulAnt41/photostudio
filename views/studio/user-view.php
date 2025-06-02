@@ -17,7 +17,13 @@ $this->title = Html::encode($model->name);
         <img src="<?= Yii::getAlias('@web/images/' . Html::encode($model->img)) ?>" alt="<?= Html::encode($model->name) ?>">
     </div>
         <div class="studio-info">
-            <p><strong>Местоположение:</strong> <?= Html::encode($model->location) ?></p>
+            <p><strong>Местоположение:</strong> 
+                <?= Html::a(
+                    Html::encode($model->location),
+                    'https://yandex.ru/maps/?text=' . urlencode($model->location),
+                    ['target' => '_blank']
+                ) ?>
+            </p>
             <p><strong>Описание:</strong> <?= Html::encode($model->description) ?></p>
             <p><strong>Цена:</strong> <?= Html::encode($model->price) ?> рублей/час</p>
             <p><strong>Размеры:</strong> <?= Html::encode($model->dimensions) ?> квадратных метров</p>
@@ -37,6 +43,16 @@ $this->title = Html::encode($model->name);
         <?php endif; ?>
     </div> 
     
+</div>
+
+<div class="studio-map">
+    <iframe 
+        src="https://yandex.ru/map-widget/v1/?text=<?= urlencode($model->location) ?>&z=15&mode=search" 
+        width="100%" 
+        height="400" 
+        frameborder="1" 
+        allowfullscreen="true">
+    </iframe>
 </div>
 
 <style>
@@ -74,9 +90,19 @@ $this->title = Html::encode($model->name);
         line-height: 1.5; /* Межстрочный интервал */
     }
 
+    .studio-info a {
+        color: rgba(145, 44, 47, 1);
+        text-decoration: underline;
+        cursor: pointer;
+    }
+
+    .studio-info a:hover {
+        text-decoration: none;
+    }
+
     .buttons {
         position: absolute; /* Установка абсолютного позиционирования */
-        bottom: 5px; /* Отступ от низа карточки */
+        bottom: 15px; /* Отступ от низа карточки */
         right: 20px; /* Отступ от правого края */
         display: flex;
         gap: 10px; /* Интервал между кнопками */
@@ -98,5 +124,10 @@ $this->title = Html::encode($model->name);
         background-color: rgb(126, 83, 45) !important;
         /* transform: translateY(-2px); */
         box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .studio-map {
+        margin: 20px;
+        overflow: hidden;
     }
 </style>

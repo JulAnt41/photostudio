@@ -3,14 +3,14 @@ main > .container {
 }
 
 .footer {
-    background-color: #f5f5f5;
-    font-size: .9em;
-    height: 60px;
+    background-color: #36332F !important;
+    height: auto !important;
+    font-size: inherit !important;
 }
 
 .footer > .container {
-    padding-right: 15px;
-    padding-left: 15px;
+    padding-right: 0 !important;
+    padding-left: 0 !important;
 }
 
 .not-set {

@@ -8,7 +8,13 @@ use yii\helpers\Html;
     <img src="<?= Yii::getAlias('@web/images/' . Html::encode($model->img)) ?>" alt="<?= Html::encode($model->name) ?>" class="studio-image">
     <div class="studio-content">
         <div class="studio-title"><?= Html::encode($model->name) ?></div>
-        <div class="studio-description"><?= Html::encode($model->location) ?></div>
+        <div class="studio-description">
+            <?= Html::a(
+                Html::encode($model->location),
+                'https://yandex.ru/maps/?text=' . urlencode($model->location),
+                ['target' => '_blank']
+            ) ?>
+        </div>
         <div class="studio-price"><?= Html::encode($model->price) ?> рублей/час</div>
         <div class="studio-dimensions"><?= Html::encode($model->dimensions) ?> м²</div>
     </div>
@@ -64,9 +70,24 @@ use yii\helpers\Html;
     }
 
     .studio-description, .studio-price, .studio-dimensions {
-        font-size: 1em;
         line-height: 1.6;
         margin-bottom: 8px;
+    }
+
+    .studio-dimensions, .studio-price {
+        font-size: 21px;
+        color: rgb(92, 85, 75);
+    }
+
+    .studio-description a {
+        color: rgba(145, 44, 47, 1);
+        text-decoration: underline;
+        cursor: pointer;
+        font-size: 1em;
+    }
+
+    .studio-description a:hover {
+        text-decoration: none;
     }
 
     .buttons {
