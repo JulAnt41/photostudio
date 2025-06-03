@@ -4,34 +4,13 @@ namespace app\models;
 
 use Yii;
 
-/**
- * This is the model class for table "review".
- *
- * @property int $id
- * @property int $id_user
- * @property int $id_reservation
- * @property int $rating
- * @property string|null $comment
- * @property string $created_at
- *
- * @property Reservation $reservation
- * @property User $user
- */
 class Review extends \yii\db\ActiveRecord
 {
-
-
-    /**
-     * {@inheritdoc}
-     */
     public static function tableName()
     {
         return 'review';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
@@ -42,42 +21,40 @@ class Review extends \yii\db\ActiveRecord
             [['created_at'], 'safe'],
             [['id_reservation'], 'exist', 'skipOnError' => true, 'targetClass' => Reservation::class, 'targetAttribute' => ['id_reservation' => 'id']],
             [['id_user'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['id_user' => 'id']],
+            [['rating'], 'in', 'range' => [1, 2, 3, 4, 5]],
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function attributeLabels()
     {
         return [
             'id' => 'ID',
-            'id_user' => 'Id User',
-            'id_reservation' => 'Id Reservation',
-            'rating' => 'Rating',
-            'comment' => 'Comment',
-            'created_at' => 'Created At',
+            'id_user' => 'Пользователь',
+            'id_reservation' => 'Бронирование',
+            'rating' => 'Оценка',
+            'comment' => 'Комментарий',
+            'created_at' => 'Дата создания',
         ];
     }
 
-    /**
-     * Gets query for [[Reservation]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
     public function getReservation()
     {
         return $this->hasOne(Reservation::class, ['id' => 'id_reservation']);
     }
 
-    /**
-     * Gets query for [[User]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'id_user']);
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            // Удаляем emoji из комментария
+            $this->comment = preg_replace('/[^\x{0000}-\x{FFFF}]/u', '', $this->comment);
+            return true;
+        }
+        return false;
     }
 
 }

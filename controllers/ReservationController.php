@@ -11,6 +11,8 @@ use yii\filters\VerbFilter;
 use \yii\web\Response;
 use app\models\Studio;
 use app\models\Photographer;
+use yii\data\ActiveDataProvider;
+use app\models\Review;
 
 class ReservationController extends Controller
 {
@@ -42,12 +44,15 @@ class ReservationController extends Controller
 
     public function actionUserIndex()
     {
-        $searchModel = new ReservationSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
-
+        $dataProvider = new ActiveDataProvider([
+            'query' => Reservation::find()->where(['id_user' => Yii::$app->user->id])->orderBy(['date' => SORT_DESC]),
+        ]);
+        
+        $reviewModel = new Review();
+        
         return $this->render('user-index', [
-            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'reviewModel' => $reviewModel,
         ]);
     }
 
@@ -124,20 +129,15 @@ class ReservationController extends Controller
 
     public function actionChangeStatus($id, $status)
     {
-        // Найти модель по ID
         $model = $this->findModel($id);
         
-        // Установка нового статуса
-        $model->id_status = $status;
-
-        // Сохранение модели и проверка успешности операции
-        if ($model->save()) {
+        // Обновляем только статус, минуя валидацию
+        if ($model->updateAttributes(['id_status' => $status])) {
             Yii::$app->session->setFlash('success', 'Статус успешно изменен');
         } else {
-            Yii::$app->session->setFlash('error', 'Ошибка при изменении статуса: ' . implode(", ", $model->getErrors()));
+            Yii::$app->session->setFlash('error', 'Ошибка при изменении статуса');
         }
         
-        // Перенаправление на страницу просмотра
         return $this->redirect(['view', 'id' => $id]);
     }
 

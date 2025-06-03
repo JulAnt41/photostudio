@@ -37,6 +37,10 @@ $this->registerCssFile('@web/css/style.css', [
                         <span class="info-value"><?= Html::encode($reservation->user->phone) ?></span>
                     </div>
                     <div class="info-row">
+                        <span class="info-label">Почта:</span>
+                        <span class="info-value"><?= Html::encode($reservation->user->email) ?></span>
+                    </div>
+                    <div class="info-row">
                         <span class="info-label">Студия:</span>
                         <span class="info-value"><?= Html::encode($reservation->studio->name) ?></span>
                     </div>

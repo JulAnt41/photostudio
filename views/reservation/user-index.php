@@ -73,10 +73,59 @@ $this->registerCssFile('@web/css/style.css', [
                     Забронировано: <?= Yii::$app->formatter->asDate($reservation->created_at, 'php:d.m.Y') ?>
                 </span>
             </div>
+            
+            <?php if ($reservation->id_status == 2): // Проверяем статус "Завершено" ?>
+                <div class="review-section">
+                    <?php 
+                    $existingReview = \app\models\Review::find()
+                        ->where(['id_reservation' => $reservation->id])
+                        ->one();
+                    
+                    if ($existingReview): ?>
+                        <div class="existing-review">
+                            <h3>Ваш отзыв</h3>
+                            <div class="review-rating">
+                                <?php for ($i = 1; $i <= 5; $i++): ?>
+                                    <span class="star <?= $i <= $existingReview->rating ? 'filled' : '' ?>">★</span>
+                                <?php endfor; ?>
+                            </div>
+                            <p class="review-comment"><?= Html::encode($existingReview->comment) ?></p>
+                            <p class="review-date">Оставлен: <?= Yii::$app->formatter->asDate($existingReview->created_at, 'php:d.m.Y') ?></p>
+                        </div>
+                    <?php else: ?>
+                        <div class="review-form-container">
+                            <h3>Оставить отзыв</h3>
+                            <?php $form = \yii\widgets\ActiveForm::begin([
+                                'action' => ['/review/create'],
+                                'options' => ['class' => 'review-form'],
+                            ]); ?>
+                            
+                            <?= $form->field($reviewModel, 'id_reservation')->hiddenInput(['value' => $reservation->id])->label(false) ?>
+                            
+                            <div class="form-group">
+                                <!-- <label>Оценка</label> -->
+                                <div class="rating-stars">
+                                    <?php for ($i = 5; $i >= 1; $i--): ?>
+                                        <input type="radio" id="star<?= $i ?>-<?= $reservation->id ?>" name="Review[rating]" value="<?= $i ?>" <?= $i == 5 ? 'checked' : '' ?>>
+                                        <label for="star<?= $i ?>-<?= $reservation->id ?>">★</label>
+                                    <?php endfor; ?>
+                                </div>
+                            </div>
+                            
+                            <?= $form->field($reviewModel, 'comment')->textarea(['rows' => 4, 'placeholder' => 'Ваш отзыв...'])->label(false) ?>
+                            
+                            <div class="form-group">
+                                <?= Html::submitButton('Отправить отзыв', ['class' => 'btn-submit-review']) ?>
+                            </div>
+                            
+                            <?php \yii\widgets\ActiveForm::end(); ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
         </div>
         <?php endforeach; ?>
     </div>
-
 </div>
 
 <style>
@@ -195,5 +244,105 @@ $this->registerCssFile('@web/css/style.css', [
         align-items: flex-start;
         gap: 10px;
     }
+}
+
+/* Отзывы */
+
+.review-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+.review-section h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: rgba(54, 51, 47, 1);
+}
+
+.review-form textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(0,0,0,0.1);
+    margin-bottom: 15px;
+    color: rgba(54, 51, 47, 1);
+}
+
+.btn-submit-review {
+    background-color: rgba(158, 105, 58, 1);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.btn-submit-review:hover {
+    background-color: rgb(126, 83, 45);
+}
+
+.rating-stars {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    margin-bottom: 15px;
+}
+
+.rating-stars input {
+    display: none;
+}
+
+.rating-stars label {
+    font-size: 24px;
+    color: #ccc;
+    cursor: pointer;
+    padding: 0 5px;
+}
+
+.rating-stars input:checked ~ label,
+.rating-stars label:hover,
+.rating-stars label:hover ~ label {
+    color: rgba(145, 44, 47, 1);
+}
+
+.existing-review {
+    background-color: rgb(248, 248, 248);
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.review-rating {
+    margin-bottom: 10px;
+}
+
+.review-rating .star {
+    font-size: 20px;
+    color: #ccc;
+}
+
+.review-rating .star.filled {
+    color: rgba(145, 44, 47, 1);
+}
+
+.review-comment {
+    margin-bottom: 5px;
+    line-height: 1.5;
+}
+
+.review-date {
+    font-size: 12px;
+    color: rgba(54, 51, 47, 0.6);
+}
+
+.form-control:focus {
+    border-color: rgba(145, 44, 47, 0.5);
+}
+
+label {
+    display: inline-block;
+    margin-bottom: 0;
 }
 </style>

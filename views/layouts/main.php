@@ -243,14 +243,6 @@ header {
     justify-content: center;
 }
 
-/* .footer {
-    background-color: #36332F;
-}
-
-.footer_text {
-    color: #CCB59F;
-} */
-
 .btn-main {
     background-color: #912C2F;
     color: white;

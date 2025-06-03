@@ -2,20 +2,15 @@
 
 namespace app\controllers;
 
+use Yii;
 use app\models\Review;
 use app\models\ReviewSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-/**
- * ReviewController implements the CRUD actions for Review model.
- */
 class ReviewController extends Controller
 {
-    /**
-     * @inheritDoc
-     */
     public function behaviors()
     {
         return array_merge(
@@ -31,11 +26,6 @@ class ReviewController extends Controller
         );
     }
 
-    /**
-     * Lists all Review models.
-     *
-     * @return string
-     */
     public function actionIndex()
     {
         $searchModel = new ReviewSearch();
@@ -47,12 +37,6 @@ class ReviewController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Review model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionView($id)
     {
         return $this->render('view', [
@@ -60,35 +44,24 @@ class ReviewController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new Review model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
-     */
     public function actionCreate()
     {
         $model = new Review();
-
-        if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+        
+        if ($model->load(Yii::$app->request->post())) {
+            $model->id_user = Yii::$app->user->id;
+            $model->created_at = date('Y-m-d H:i:s');
+            
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Спасибо за ваш отзыв!');
+                return $this->redirect(['/reservation/user-index']);
             }
-        } else {
-            $model->loadDefaultValues();
         }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
+        
+        Yii::$app->session->setFlash('error', 'Не удалось сохранить отзыв.');
+        return $this->redirect(['/reservation/user-index']);
     }
 
-    /**
-     * Updates an existing Review model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -116,13 +89,6 @@ class ReviewController extends Controller
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Review model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $id ID
-     * @return Review the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = Review::findOne(['id' => $id])) !== null) {
