@@ -68,10 +68,6 @@ class UserController extends Controller
      */
     public function actionCreate()
     {
-        // if (Yii::$app->request->get('message')) {
-        //     Yii::$app->session->setFlash('info', Yii::$app->request->get('message'));
-        // }
-
         if ($message = Yii::$app->request->get('message')) {
             Yii::$app->session->setFlash('info', $message);
         }
@@ -81,12 +77,12 @@ class UserController extends Controller
          if ($model->load(Yii::$app->request->post())) {
              if ($model->register()) {
                  Yii::$app->session->setFlash('success', 'Регистрация прошла успешно!');
-                return $this->redirect(['site/index']); // Перенаправляем на главную страницу
+                return $this->redirect(['site/login']);
              } else {
                  Yii::$app->session->setFlash('error', 'Ошибка при регистрации.');
              }
          }
-    
+
          return $this->render('create', [
              'model' => $model,
          ]);

@@ -87,7 +87,7 @@ class PhotographerController extends Controller
         return $this->render('photographer-view', [
             'upcomingReservations' => $upcomingReservations,
         ]);
-    }
+    } 
 
     public function actionCreate()
     {

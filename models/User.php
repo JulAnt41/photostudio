@@ -63,8 +63,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function register()
     {
         if ($this->validate()) {
-            //$this->password = Yii::$app->security->generatePasswordHash($this->password); // Хэшируем пароль
-            return $this->save(false); // Сохраняем пользователя без повторной валидации
+            return $this->save(false);
         }
         return false;
     }

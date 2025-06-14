@@ -38,7 +38,6 @@ class AdminController extends Controller
             return false;
         }
 
-        // Дополнительная проверка перед каждым действием на роль. Если роль не Админ - редирект на главную страницу
         if (Yii::$app->user->isGuest || Yii::$app->user->identity->id_role !== 2) {
             return $this->redirect(['site/index']);
         }
