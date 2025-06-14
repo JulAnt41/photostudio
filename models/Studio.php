@@ -19,6 +19,7 @@ use Yii;
  */
 class Studio extends \yii\db\ActiveRecord
 {
+    public $imageFile;
 
 
     /**
@@ -40,6 +41,8 @@ class Studio extends \yii\db\ActiveRecord
             [['location', 'description'], 'string'],
             [['price', 'dimensions'], 'integer'],
             [['name', 'img'], 'string', 'max' => 255],
+            [['imageFile'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg, jpeg'],
+
         ];
     }
 
@@ -67,6 +70,25 @@ class Studio extends \yii\db\ActiveRecord
     public function getReservations()
     {
         return $this->hasMany(Reservation::class, ['id_studio' => 'id']);
+    }
+
+    public function upload()
+    {
+        if ($this->validate()) {
+            $directory = Yii::getAlias('@webroot/images/');
+            if (!file_exists($directory)) {
+                mkdir($directory, 0777, true);
+            }
+            
+            $filename = 'img_'.time().'_'.Yii::$app->security->generateRandomString(6).'.'.$this->imageFile->extension;
+            $path = $directory . $filename;
+            
+            if ($this->imageFile->saveAs($path)) {
+                $this->img = $filename;
+                return true;
+            }
+        }
+        return false;
     }
 
 }

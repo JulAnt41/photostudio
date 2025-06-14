@@ -7,6 +7,7 @@ use app\models\StudioSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * StudioController implements the CRUD actions for Studio model.
@@ -88,8 +89,19 @@ class StudioController extends Controller
         $model = new Studio();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            $model->load($this->request->post());
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            
+            if ($model->imageFile === null) {
+                Yii::$app->session->setFlash('error', 'Не выбран файл для загрузки');
+            } elseif ($model->upload()) {
+                if ($model->save(false)) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                } else {
+                    Yii::$app->session->setFlash('error', 'Ошибка при сохранении данных');
+                }
+            } else {
+                Yii::$app->session->setFlash('error', 'Ошибка при загрузке файла: ' . implode(', ', $model->getFirstErrors()));
             }
         } else {
             $model->loadDefaultValues();
@@ -111,8 +123,25 @@ class StudioController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost) {
+            $model->load($this->request->post());
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            
+            // Если загружено новое изображение
+            if ($model->imageFile !== null) {
+                if ($model->upload()) {
+                    // Сохраняем модель без валидации (false), так как мы уже проверили файл
+                    if ($model->save(false)) {
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    }
+                } else {
+                    Yii::$app->session->setFlash('error', 'Ошибка при загрузке файла');
+                }
+            } 
+            // Если изображение не загружали, просто сохраняем модель
+            elseif ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render('update', [

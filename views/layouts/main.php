@@ -10,10 +10,259 @@ use yii\bootstrap4\Html;
 use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
 
-AppAsset::register($this);
-$this->registerCssFile('@web/css/style.css', [
-    'depends' => [AppAsset::class],
-]);
+// AppAsset::register($this);
+// $this->registerCssFile('@web/css/style.css', [
+//     'depends' => [AppAsset::class],
+// ]);
+$this->registerCss(<<<CSS
+    header {
+    background-color: transparent !important; */
+    padding: 10px; /* Отступы */
+    /* height: 80px; */
+}
+
+/* Стили для навбара */
+.custom-navbar {
+    position: relative;
+}
+
+/* Центрированные элементы */
+.navbar-nav.mx-auto {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* Правые элементы */
+.navbar-nav.ml-auto {
+    margin-left: auto !important;
+}
+
+.navbar-logo {
+    height: 35px;
+    margin-right: 5px;
+}
+
+.navbar-brand-text {
+    color:rgba(56, 16, 16, 1); /* Ваш цвет */
+    font-weight: bold;
+}
+
+.navbar-nav .nav-link {
+    color: rgba(107, 99, 87, 1); /* Цвет текста навигации */
+    margin-right: 10px; /* Отступы между элементами */
+}
+
+.navbar-nav .nav-link:hover {
+    color: rgba(54, 51, 47, 1); /* Цвет текста при наведении */
+}
+
+.nav-login-btn {
+    background-color: rgba(145, 44, 47, 1) !important;
+    color: white !important;
+    border-radius: 50px !important; /* Круглая кнопка */
+    padding: 8px 20px !important;
+    margin-left: 15px !important;
+    border: none !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+}
+
+.nav-login-btn:hover {
+    background-color: rgb(119, 37, 39) !important;
+}
+
+/* Стиль для ссылки "Регистрация" */
+.nav-register-link {
+    color: rgba(145, 44, 47, 1) !important;
+    /* font-weight: 500 !important; */
+    text-decoration: none !important;
+    padding: 8px 0 !important;
+    display: inline-block !important;
+}
+
+.nav-register-link:hover {
+    color: rgba(56, 16, 16, 1) !important;
+}
+
+.fixed-top {
+    top: 0; /* Фиксированная позиция */
+    z-index: 1030; /* Прозрачность */
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+}
+
+.btn-main {
+    background-color: #912C2F;
+    color: white;
+}
+
+.btn-main:hover {
+    background-color: #702124;
+    color: rgb(230, 230, 230);
+}
+
+.footer {
+    background-color: #36332F;
+    color: #CCB59F;
+    height: auto !important;
+    padding: 40px 0 20px;
+    font-family: Arial, sans-serif;
+    font-size: inherit !important;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer > .container {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+}
+
+/* Стили для блока контактов */
+.contacts-section {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.footer-title {
+    color: rgb(219, 196, 174);
+    font-size: 22px;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.contact-info {
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.contact-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 8px 0;
+}
+
+.contact-label {
+    font-weight: 500;
+}
+
+.contact-link {
+    color: #CCB59F;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.contact-link:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+.social-title {
+    margin: 20px 0 10px;
+    font-weight: 500;
+}
+
+/* Стили для иконок соцсетей */
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.social-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+.social-icon:hover {
+    color: #fff;
+    background-color: rgba(204, 181, 159, 0.3);
+    transform: translateY(-3px);
+}
+
+/* Стиль для иконки ВКонтакте */
+.vk-icon {
+    background-color: rgba(204, 181, 159, 0.1);
+    color: #CCB59F;
+}
+
+.vk-icon svg {
+    width: 24px;
+    height: 24px;
+    margin-top: 10px;
+}
+
+/* Стиль для иконки Телеграма */
+.tg-icon {
+    background-color: rgba(204, 181, 159, 0.1);
+    color: #CCB59F;
+    padding: 8px; /* Чтобы иконка занимала всё пространство */
+}
+
+.tg-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+}
+
+/* Стили для нижнего блока с ссылками */
+.links-section {
+    border-top: 1px solid rgba(204, 181, 159, 0.2);
+    padding-top: 20px;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: space-between;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.footer-link {
+    color: #CCB59F;
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s;
+}
+
+.footer-link:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .footer-links {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .contact-row {
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+    }
+    
+    .footer-title {
+        font-size: 20px;
+    }
+}
+CSS
+);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -161,7 +410,7 @@ $this->registerCssFile('@web/css/style.css', [
 </html>
 <?php $this->endPage() ?>
 
-<style>
+<!-- <style>
 
 header {
     background-color: transparent !important; */
@@ -409,4 +658,4 @@ header {
         font-size: 20px;
     }
 }
-</style>
+</style> -->

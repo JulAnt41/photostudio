@@ -22,6 +22,15 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'price')->textInput()->label('Стоимость, рублей/час') ?>
 
         <?= $form->field($model, 'dimensions')->textInput()->label('Размеры, м²') ?>
+    
+        <div class="form-fields-container">
+            <?= $form->field($model, 'imageFile', [
+                'inputOptions' => [
+                    'class' => 'form-control-file',
+                    'style' => 'padding: 10px; border: 1px dashed rgba(107, 99, 87, 0.3); border-radius: 4px;'
+                ]
+            ])->fileInput(['accept' => 'image/*'])->label('Выберите изображение') ?>
+        </div>
     </div>
 
     <div class="form-group text-center">

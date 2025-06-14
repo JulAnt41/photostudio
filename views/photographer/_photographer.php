@@ -167,26 +167,58 @@ document.addEventListener('DOMContentLoaded', function() {
     const slider = document.querySelector('.portfolio-slider');
     const prevBtn = document.querySelector('.prev-arrow');
     const nextBtn = document.querySelector('.next-arrow');
-    const slides = document.querySelectorAll('.portfolio-slide');
     
-    if (slides.length > 0) {
-        let currentIndex = 0;
-        const slideWidth = 210; // 200px + 10px gap
-        
-        prevBtn.addEventListener('click', function() {
-            currentIndex = Math.max(currentIndex - 1, 0);
-            slider.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
-        });
-        
-        nextBtn.addEventListener('click', function() {
-            currentIndex = Math.min(currentIndex + 1, slides.length - 1);
-            slider.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
-        });
-        
-        slider.style.transition = 'transform 0.3s ease';
-    } else {
+    // Проверяем существование всех элементов
+    if (!slider || !prevBtn || !nextBtn) return;
+    
+    const slides = document.querySelectorAll('.portfolio-slide');
+    if (slides.length === 0) {
         prevBtn.style.display = 'none';
         nextBtn.style.display = 'none';
+        return;
     }
+    
+    let currentIndex = 0;
+    const slideStyle = window.getComputedStyle(slides[0]);
+    const slideWidth = slides[0].offsetWidth + 
+                      parseInt(slideStyle.marginLeft) + 
+                      parseInt(slideStyle.marginRight);
+    
+    function updateSlider() {
+        slider.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+        
+        // Блокируем кнопки в крайних положениях
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.disabled = currentIndex >= slides.length - 1;
+    }
+    
+    prevBtn.addEventListener('click', function() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateSlider();
+        }
+    });
+    
+    nextBtn.addEventListener('click', function() {
+        if (currentIndex < slides.length - 1) {
+            currentIndex++;
+            updateSlider();
+        }
+    });
+    
+    // Инициализация
+    slider.style.transition = 'transform 0.3s ease';
+    updateSlider();
+    
+    // Адаптация к изменению размера окна
+    window.addEventListener('resize', function() {
+        const newSlideWidth = slides[0].offsetWidth + 
+                            parseInt(slideStyle.marginLeft) + 
+                            parseInt(slideStyle.marginRight);
+        if (newSlideWidth !== slideWidth) {
+            slideWidth = newSlideWidth;
+            updateSlider();
+        }
+    });
 });
 </script>
